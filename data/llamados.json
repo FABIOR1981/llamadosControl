@@ -78,5 +78,21 @@
     "cant_entrevistados": 20,
     "fecha_psicotecnico": "2026-01-31",
     "cant_psicotecnico": 10
+  },
+  {
+    "id_llamado": "L-23",
+    "nombre_puesto": "OTRO",
+    "fecha_inicio": "2026-01-06",
+    "fecha_fin": "",
+    "cant_finalistas": "",
+    "estado": "Abierto",
+    "fecha_postulacion": "",
+    "cant_postulantes": "",
+    "fecha_seleccion": "",
+    "cant_seleccionados": "",
+    "fecha_entrevista": "",
+    "cant_entrevistados": "",
+    "fecha_psicotecnico": "",
+    "cant_psicotecnico": ""
   }
 ]
