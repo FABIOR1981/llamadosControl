@@ -50,40 +50,40 @@ function renderTabla() {
     // Fila principal (cabezal)
     const tr = document.createElement('tr');
     tr.className = 'llamado-row';
-    tr.innerHTML = `
-      <td><button class="toggle-detalle" title="Ver detalle" data-idx="${idx}">▶</button></td>
-      <td>${l.id_llamado || ''}</td>
-      <td>${l.nombre_puesto || ''}</td>
-      <td>${formatFecha(l.fecha_inicio)}</td>
-      <td>${formatFecha(l.fecha_fin)}</td>
-      <td>${l.cant_finalistas || ''}</td>
-      <td>${l.estado || ''}</td>
-      <td>${calcularDiasActivos(l.fecha_inicio, l.fecha_fin)}</td>
-      <td>${calcularConversionFinal(l.cant_postulantes, l.cant_finalistas)}</td>
-      <td><button class="text-blue-600 underline hover:text-blue-900" onclick="editarLlamado(${idx})">Editar</button></td>
-    `;
+      tr.innerHTML = `
+        <td><button class="toggle-detalle" title="Ver detalle" data-idx="${idx}">▶</button></td>
+        <td>${l.id_llamado || ''}</td>
+        <td>${l.nombre_puesto || ''}</td>
+        <td>${formatFecha(l.fecha_inicio)}</td>
+        <td>${formatFecha(l.fecha_fin)}</td>
+        <td style="text-align:center;">${l.cant_finalistas || ''}</td>
+        <td>${l.estado || ''}</td>
+        <td style="text-align:center;">${calcularDiasActivos(l.fecha_inicio, l.fecha_fin)}</td>
+        <td style="text-align:center;">${calcularConversionFinal(l.cant_postulantes, l.cant_finalistas)}</td>
+        <td><button class="text-blue-600 underline hover:text-blue-900" onclick="editarLlamado(${idx})">Editar</button></td>
+      `;
     tbody.appendChild(tr);
 
     // Fila detalle (oculta por defecto)
     const trDetalle = document.createElement('tr');
     trDetalle.className = 'detalle-row';
     trDetalle.style.display = 'none';
-    trDetalle.innerHTML = `<td colspan="10">
-      <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
-        <strong>Fechas y cantidades por etapa:</strong>
-        <table style="width:auto; margin-top:0.5em; font-size:0.95em;">
-          <tr style="font-weight:bold; background:#e0e7ff;">
-            <td style="padding:2px 10px;">Etapa</td>
-            <td style="padding:2px 10px;">Fecha</td>
-            <td style="padding:2px 10px;">Cantidad</td>
-          </tr>
-          <tr><td>Postulación</td><td>${formatFecha(l.fecha_postulacion)}</td><td>${l.cant_postulantes || ''}</td></tr>
-          <tr><td>Selección</td><td>${formatFecha(l.fecha_seleccion)}</td><td>${l.cant_seleccionados || ''}</td></tr>
-          <tr><td>Entrevista</td><td>${formatFecha(l.fecha_entrevista)}</td><td>${l.cant_entrevistados || ''}</td></tr>
-          <tr><td>Psicotécnico</td><td>${formatFecha(l.fecha_psicotecnico)}</td><td>${l.cant_psicotecnico || ''}</td></tr>
-        </table>
-      </div>
-    </td>`;
+      trDetalle.innerHTML = `<td colspan="10">
+        <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
+          <strong>Fechas y cantidades por etapa:</strong>
+          <table style="width:auto; margin-top:0.5em; font-size:0.95em;">
+            <tr style="font-weight:bold; background:#e0e7ff;">
+              <td style="padding:2px 10px;">Etapa</td>
+              <td style="padding:2px 10px;">Fecha</td>
+              <td style="padding:2px 10px; text-align:center;">Cantidad</td>
+            </tr>
+            <tr><td>Postulación</td><td>${formatFecha(l.fecha_postulacion)}</td><td style="text-align:center;">${l.cant_postulantes || ''}</td></tr>
+            <tr><td>Selección</td><td>${formatFecha(l.fecha_seleccion)}</td><td style="text-align:center;">${l.cant_seleccionados || ''}</td></tr>
+            <tr><td>Entrevista</td><td>${formatFecha(l.fecha_entrevista)}</td><td style="text-align:center;">${l.cant_entrevistados || ''}</td></tr>
+            <tr><td>Psicotécnico</td><td>${formatFecha(l.fecha_psicotecnico)}</td><td style="text-align:center;">${l.cant_psicotecnico || ''}</td></tr>
+          </table>
+        </div>
+      </td>`;
     tbody.appendChild(trDetalle);
   });
 
