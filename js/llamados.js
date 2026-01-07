@@ -70,17 +70,25 @@ function renderTabla() {
     trDetalle.style.display = 'none';
       trDetalle.innerHTML = `<td colspan="10">
         <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
-          <strong>Fechas y cantidades por etapa:</strong>
-          <table style="width:auto; margin-top:0.5em; font-size:0.95em;">
-            <tr style="font-weight:bold; background:#e0e7ff;">
-              <td style="padding:2px 10px;">Etapa</td>
-              <td style="padding:2px 10px;">Fecha</td>
-              <td style="padding:2px 10px; text-align:center;">Cantidad</td>
+          <strong style="font-size:1.08em; color:#1d4ed8;">Fechas y cantidades por etapa:</strong>
+          <table style="width:auto; margin-top:0.5em; font-size:1em; border-radius:0.75em; overflow:hidden; border-collapse:separate; border-spacing:0; box-shadow:0 2px 8px rgba(30,64,175,0.06);">
+            <tr style="font-weight:700; background:#dbeafe; color:#2563eb;">
+              <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Etapa</td>
+              <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Fecha</td>
+              <td style="padding:6px 18px; text-align:center; font-family:'Segoe UI',Arial,sans-serif;">Cantidad</td>
             </tr>
-            <tr><td>Postulación</td><td>${formatFecha(l.fecha_postulacion)}</td><td style="text-align:center;">${l.cant_postulantes || ''}</td></tr>
-            <tr><td>Selección</td><td>${formatFecha(l.fecha_seleccion)}</td><td style="text-align:center;">${l.cant_seleccionados || ''}</td></tr>
-            <tr><td>Entrevista</td><td>${formatFecha(l.fecha_entrevista)}</td><td style="text-align:center;">${l.cant_entrevistados || ''}</td></tr>
-            <tr><td>Psicotécnico</td><td>${formatFecha(l.fecha_psicotecnico)}</td><td style="text-align:center;">${l.cant_psicotecnico || ''}</td></tr>
+            <tr style="background:#fff;">
+              <td style="padding:4px 12px;">Postulación</td><td style="padding:4px 12px;">${formatFecha(l.fecha_postulacion)}</td><td style="text-align:center; padding:4px 12px;">${l.cant_postulantes || ''}</td>
+            </tr>
+            <tr style="background:#f1f5f9;">
+              <td style="padding:4px 12px;">Selección</td><td style="padding:4px 12px;">${formatFecha(l.fecha_seleccion)}</td><td style="text-align:center; padding:4px 12px;">${l.cant_seleccionados || ''}</td>
+            </tr>
+            <tr style="background:#fff;">
+              <td style="padding:4px 12px;">Entrevista</td><td style="padding:4px 12px;">${formatFecha(l.fecha_entrevista)}</td><td style="text-align:center; padding:4px 12px;">${l.cant_entrevistados || ''}</td>
+            </tr>
+            <tr style="background:#f1f5f9;">
+              <td style="padding:4px 12px;">Psicotécnico</td><td style="padding:4px 12px;">${formatFecha(l.fecha_psicotecnico)}</td><td style="text-align:center; padding:4px 12px;">${l.cant_psicotecnico || ''}</td>
+            </tr>
           </table>
         </div>
       </td>`;
