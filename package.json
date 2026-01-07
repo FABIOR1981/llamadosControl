@@ -1,0 +1,12 @@
+{
+  "name": "llamadoscontrol",
+  "version": "1.0.0",
+  "description": "Gestión de llamados laborales con funciones serverless en Netlify",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "node-fetch": "^2.6.12"
+  }
+}
