@@ -1,0 +1,4 @@
+/* Estilos personalizados para la app de llamados */
+.input-tw {
+  @apply border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-400;
+}
