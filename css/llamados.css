@@ -123,3 +123,51 @@ td, th {
 td:last-child, th:last-child {
   border-right: none;
 }
+
+/* Ajustes para tabla compacta y responsive */
+@media (max-width: 1200px) {
+  #tablaLlamados th, #tablaLlamados td {
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 0.97em;
+  }
+  #tablaLlamados input.input-inline, #tablaLlamados select.input-inline {
+    width: 90px !important;
+    font-size: 0.97em;
+    padding: 0.2em 0.4em;
+  }
+}
+@media (max-width: 900px) {
+  #tablaLlamados th:nth-child(8), #tablaLlamados td:nth-child(8),
+  #tablaLlamados th:nth-child(9), #tablaLlamados td:nth-child(9) {
+    display: none;
+  }
+  #tablaLlamados input.input-inline, #tablaLlamados select.input-inline {
+    width: 70px !important;
+    font-size: 0.95em;
+  }
+}
+@media (max-width: 700px) {
+  #tablaLlamados th:nth-child(6), #tablaLlamados td:nth-child(6),
+  #tablaLlamados th:nth-child(7), #tablaLlamados td:nth-child(7) {
+    display: none;
+  }
+  #tablaLlamados input.input-inline, #tablaLlamados select.input-inline {
+    width: 60px !important;
+    font-size: 0.93em;
+  }
+}
+
+#tablaLlamados th, #tablaLlamados td {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 1em;
+}
+#tablaLlamados input.input-inline, #tablaLlamados select.input-inline {
+  min-width: 60px;
+  max-width: 120px;
+  font-size: 1em;
+  padding: 0.3em 0.5em;
+}
