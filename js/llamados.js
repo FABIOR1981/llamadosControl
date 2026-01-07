@@ -121,9 +121,17 @@ function renderTabla() {
     btn.onclick = async function() {
       const idx = Number(this.getAttribute('data-idx'));
       const tr = this.closest('tr');
+      const trDetalle = tr.nextElementSibling;
       const inputs = tr.querySelectorAll('.input-inline, select.input-inline');
+      const inputsDetalle = trDetalle ? trDetalle.querySelectorAll('.input-inline, select.input-inline') : [];
       const l = llamados[idx];
       inputs.forEach(input => {
+        const field = input.getAttribute('data-field');
+        let val = input.value;
+        if (input.type === 'number') val = val ? Number(val) : '';
+        l[field] = val;
+      });
+      inputsDetalle.forEach(input => {
         const field = input.getAttribute('data-field');
         let val = input.value;
         if (input.type === 'number') val = val ? Number(val) : '';
