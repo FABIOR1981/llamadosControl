@@ -35,6 +35,13 @@ function calcularConversionFinal(cant_postulantes, cant_finalistas) {
   return ((cant_finalistas / cant_postulantes) * 100).toFixed(1) + '%';
 }
 
+function formatFecha(fecha) {
+  if (!fecha) return '';
+  const d = new Date(fecha);
+  if (isNaN(d)) return fecha;
+  return d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
 function renderTabla() {
   const tbody = document.querySelector(`#${TABLE_ID} tbody`);
   if (!tbody) return;
@@ -44,15 +51,15 @@ function renderTabla() {
     tr.innerHTML = `
       <td>${l.id_llamado || ''}</td>
       <td>${l.nombre_puesto || ''}</td>
-      <td>${l.fecha_inicio || ''}</td>
-      <td>${l.fecha_fin || ''}</td>
-      <td>${l.fecha_postulacion || ''}</td>
+      <td>${formatFecha(l.fecha_inicio)}</td>
+      <td>${formatFecha(l.fecha_fin)}</td>
+      <td>${formatFecha(l.fecha_postulacion)}</td>
       <td>${l.cant_postulantes || ''}</td>
-      <td>${l.fecha_seleccion || ''}</td>
+      <td>${formatFecha(l.fecha_seleccion)}</td>
       <td>${l.cant_seleccionados || ''}</td>
-      <td>${l.fecha_entrevista || ''}</td>
+      <td>${formatFecha(l.fecha_entrevista)}</td>
       <td>${l.cant_entrevistados || ''}</td>
-      <td>${l.fecha_psicotecnico || ''}</td>
+      <td>${formatFecha(l.fecha_psicotecnico)}</td>
       <td>${l.cant_psicotecnico || ''}</td>
       <td>${l.cant_finalistas || ''}</td>
       <td>${l.estado || ''}</td>
