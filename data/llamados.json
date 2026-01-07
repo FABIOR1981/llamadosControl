@@ -94,5 +94,21 @@
     "cant_entrevistados": "",
     "fecha_psicotecnico": "",
     "cant_psicotecnico": ""
+  },
+  {
+    "id_llamado": "l-99",
+    "nombre_puesto": "uno mas",
+    "fecha_inicio": "2026-03-03",
+    "fecha_fin": "",
+    "cant_finalistas": "",
+    "estado": "Abierto",
+    "fecha_postulacion": "",
+    "cant_postulantes": "",
+    "fecha_seleccion": "",
+    "cant_seleccionados": "",
+    "fecha_entrevista": "",
+    "cant_entrevistados": "",
+    "fecha_psicotecnico": "",
+    "cant_psicotecnico": ""
   }
 ]
