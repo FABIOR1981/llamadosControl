@@ -57,10 +57,10 @@
     "fecha_seleccion": "2026-01-18",
     "cant_seleccionados": 9,
     "fecha_entrevista": "2026-01-22",
-    "cant_entrevistados": 6,
+    "cant_entrevistados": "",
     "fecha_psicotecnico": "2026-01-25",
-    "cant_psicotecnico": 4,
-    "cant_finalistas": 2,
+    "cant_psicotecnico": "",
+    "cant_finalistas": "",
     "estado": "Abierto"
   }
 ]
