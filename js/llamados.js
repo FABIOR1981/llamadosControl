@@ -47,20 +47,15 @@ function renderTabla() {
   if (!tbody) return;
   tbody.innerHTML = '';
   llamados.forEach((l, idx) => {
+    // Fila principal (cabezal)
     const tr = document.createElement('tr');
+    tr.className = 'llamado-row';
     tr.innerHTML = `
+      <td><button class="toggle-detalle" title="Ver detalle" data-idx="${idx}">▶</button></td>
       <td>${l.id_llamado || ''}</td>
       <td>${l.nombre_puesto || ''}</td>
       <td>${formatFecha(l.fecha_inicio)}</td>
       <td>${formatFecha(l.fecha_fin)}</td>
-      <td>${formatFecha(l.fecha_postulacion)}</td>
-      <td>${l.cant_postulantes || ''}</td>
-      <td>${formatFecha(l.fecha_seleccion)}</td>
-      <td>${l.cant_seleccionados || ''}</td>
-      <td>${formatFecha(l.fecha_entrevista)}</td>
-      <td>${l.cant_entrevistados || ''}</td>
-      <td>${formatFecha(l.fecha_psicotecnico)}</td>
-      <td>${l.cant_psicotecnico || ''}</td>
       <td>${l.cant_finalistas || ''}</td>
       <td>${l.estado || ''}</td>
       <td>${calcularDiasActivos(l.fecha_inicio, l.fecha_fin)}</td>
@@ -68,6 +63,39 @@ function renderTabla() {
       <td><button class="text-blue-600 underline hover:text-blue-900" onclick="editarLlamado(${idx})">Editar</button></td>
     `;
     tbody.appendChild(tr);
+
+    // Fila detalle (oculta por defecto)
+    const trDetalle = document.createElement('tr');
+    trDetalle.className = 'detalle-row';
+    trDetalle.style.display = 'none';
+    trDetalle.innerHTML = `<td colspan="10">
+      <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
+        <strong>Fechas y cantidades por etapa:</strong>
+        <table style="width:auto; margin-top:0.5em; font-size:0.95em;">
+          <tr><td>Postulación:</td><td>${formatFecha(l.fecha_postulacion)}</td><td>Postulantes:</td><td>${l.cant_postulantes || ''}</td></tr>
+          <tr><td>Selección:</td><td>${formatFecha(l.fecha_seleccion)}</td><td>Seleccionados:</td><td>${l.cant_seleccionados || ''}</td></tr>
+          <tr><td>Entrevista:</td><td>${formatFecha(l.fecha_entrevista)}</td><td>Entrevistados:</td><td>${l.cant_entrevistados || ''}</td></tr>
+          <tr><td>Psicotécnico:</td><td>${formatFecha(l.fecha_psicotecnico)}</td><td>Psicotécnico OK:</td><td>${l.cant_psicotecnico || ''}</td></tr>
+        </table>
+      </div>
+    </td>`;
+    tbody.appendChild(trDetalle);
+  });
+
+  // Eventos para expandir/colapsar detalle
+  tbody.querySelectorAll('.toggle-detalle').forEach(btn => {
+    btn.onclick = function() {
+      const idx = this.getAttribute('data-idx');
+      const row = this.closest('tr');
+      const detalle = row.nextElementSibling;
+      if (detalle.style.display === 'none') {
+        detalle.style.display = '';
+        this.textContent = '▼';
+      } else {
+        detalle.style.display = 'none';
+        this.textContent = '▶';
+      }
+    };
   });
 }
 
