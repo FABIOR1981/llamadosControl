@@ -72,10 +72,15 @@ function renderTabla() {
       <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
         <strong>Fechas y cantidades por etapa:</strong>
         <table style="width:auto; margin-top:0.5em; font-size:0.95em;">
-          <tr><td>Postulación:</td><td>${formatFecha(l.fecha_postulacion)}</td><td>Postulantes:</td><td>${l.cant_postulantes || ''}</td></tr>
-          <tr><td>Selección:</td><td>${formatFecha(l.fecha_seleccion)}</td><td>Seleccionados:</td><td>${l.cant_seleccionados || ''}</td></tr>
-          <tr><td>Entrevista:</td><td>${formatFecha(l.fecha_entrevista)}</td><td>Entrevistados:</td><td>${l.cant_entrevistados || ''}</td></tr>
-          <tr><td>Psicotécnico:</td><td>${formatFecha(l.fecha_psicotecnico)}</td><td>Psicotécnico OK:</td><td>${l.cant_psicotecnico || ''}</td></tr>
+          <tr style="font-weight:bold; background:#e0e7ff;">
+            <td style="padding:2px 10px;">Etapa</td>
+            <td style="padding:2px 10px;">Fecha</td>
+            <td style="padding:2px 10px;">Cantidad</td>
+          </tr>
+          <tr><td>Postulación</td><td>${formatFecha(l.fecha_postulacion)}</td><td>${l.cant_postulantes || ''}</td></tr>
+          <tr><td>Selección</td><td>${formatFecha(l.fecha_seleccion)}</td><td>${l.cant_seleccionados || ''}</td></tr>
+          <tr><td>Entrevista</td><td>${formatFecha(l.fecha_entrevista)}</td><td>${l.cant_entrevistados || ''}</td></tr>
+          <tr><td>Psicotécnico</td><td>${formatFecha(l.fecha_psicotecnico)}</td><td>${l.cant_psicotecnico || ''}</td></tr>
         </table>
       </div>
     </td>`;
