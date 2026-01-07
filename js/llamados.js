@@ -201,15 +201,12 @@ function renderTabla() {
   // Evento guardar nuevo
   trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
     const inputs = trNuevo.querySelectorAll('.input-inline, select.input-inline');
-    const inputsDetalle = trDetalleNuevo.querySelectorAll('.input-inline, select.input-inline');
-    const nuevoLlamado = {};
+    // Solo tomar campos del cabezal
+    const nuevoLlamado = {
+      id_llamado: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
+      fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
+    };
     inputs.forEach(input => {
-      const field = input.getAttribute('data-field');
-      let val = input.value;
-      if (input.type === 'number') val = val ? Number(val) : '';
-      nuevoLlamado[field] = val;
-    });
-    inputsDetalle.forEach(input => {
       const field = input.getAttribute('data-field');
       let val = input.value;
       if (input.type === 'number') val = val ? Number(val) : '';
@@ -220,6 +217,7 @@ function renderTabla() {
       alert('Debe completar al menos ID y Nombre Puesto');
       return;
     }
+    // El detalle queda vacío
     llamados.push(nuevoLlamado);
     await guardarLlamados();
     renderTabla();
