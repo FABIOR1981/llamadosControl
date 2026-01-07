@@ -148,6 +148,82 @@ function renderTabla() {
       renderTabla();
     };
   });
+
+  // Renderizar fila para nuevo llamado
+  const nuevo = {
+    id_llamado: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
+    fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
+  };
+  const trNuevo = document.createElement('tr');
+  trNuevo.className = 'llamado-row';
+  trNuevo.innerHTML = `
+    <td></td>
+    <td><input type='text' data-field='id_llamado' class='input-tw input-inline' style='width:80px;'></td>
+    <td><input type='text' data-field='nombre_puesto' class='input-tw input-inline' style='width:140px;'></td>
+    <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'></td>
+    <td><input type='date' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'></td>
+    <td style="text-align:center;"><input type='number' data-field='cant_finalistas' class='input-tw input-inline' style='width:70px;'></td>
+    <td><select data-field='estado' class='input-tw input-inline' style='width:110px;'><option value='Abierto'>Abierto</option><option value='En Curso'>En Curso</option><option value='Pausado'>Pausado</option><option value='Cerrado'>Cerrado</option></select></td>
+    <td style="text-align:center;"></td>
+    <td style="text-align:center;"></td>
+    <td><button class='btn-guardar-nuevo'>Guardar</button></td>
+  `;
+  tbody.appendChild(trNuevo);
+  // Fila detalle para nuevo llamado
+  const trDetalleNuevo = document.createElement('tr');
+  trDetalleNuevo.className = 'detalle-row';
+  trDetalleNuevo.style.display = '';
+  trDetalleNuevo.innerHTML = `<td colspan="10">
+    <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
+      <strong style="font-size:1.08em; color:#1d4ed8;">Fechas y cantidades por etapa:</strong>
+      <table style="width:auto; margin-top:0.5em; font-size:1em; border-radius:0.75em; overflow:hidden; border-collapse:separate; border-spacing:0; box-shadow:0 2px 8px rgba(30,64,175,0.06);">
+        <tr style="font-weight:700; background:#dbeafe; color:#2563eb;">
+          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Etapa</td>
+          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Fecha</td>
+          <td style="padding:6px 18px; text-align:center; font-family:'Segoe UI',Arial,sans-serif;">Cantidad</td>
+        </tr>
+        <tr style="background:#fff;">
+          <td style="padding:4px 12px;">Postulación</td><td style="padding:4px 12px;"><input type='date' data-field='fecha_postulacion' class='input-tw input-inline' style='width:130px;'></td><td style="text-align:center; padding:4px 12px;"><input type='number' data-field='cant_postulantes' class='input-tw input-inline' style='width:70px;'></td>
+        </tr>
+        <tr style="background:#f1f5f9;">
+          <td style="padding:4px 12px;">Selección</td><td style="padding:4px 12px;"><input type='date' data-field='fecha_seleccion' class='input-tw input-inline' style='width:130px;'></td><td style="text-align:center; padding:4px 12px;"><input type='number' data-field='cant_seleccionados' class='input-tw input-inline' style='width:70px;'></td>
+        </tr>
+        <tr style="background:#fff;">
+          <td style="padding:4px 12px;">Entrevista</td><td style="padding:4px 12px;"><input type='date' data-field='fecha_entrevista' class='input-tw input-inline' style='width:130px;'></td><td style="text-align:center; padding:4px 12px;"><input type='number' data-field='cant_entrevistados' class='input-tw input-inline' style='width:70px;'></td>
+        </tr>
+        <tr style="background:#f1f5f9;">
+          <td style="padding:4px 12px;">Psicotécnico</td><td style="padding:4px 12px;"><input type='date' data-field='fecha_psicotecnico' class='input-tw input-inline' style='width:130px;'></td><td style="text-align:center; padding:4px 12px;"><input type='number' data-field='cant_psicotecnico' class='input-tw input-inline' style='width:70px;'></td>
+        </tr>
+      </table>
+    </div>
+  </td>`;
+  tbody.appendChild(trDetalleNuevo);
+  // Evento guardar nuevo
+  trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
+    const inputs = trNuevo.querySelectorAll('.input-inline, select.input-inline');
+    const inputsDetalle = trDetalleNuevo.querySelectorAll('.input-inline, select.input-inline');
+    const nuevoLlamado = {};
+    inputs.forEach(input => {
+      const field = input.getAttribute('data-field');
+      let val = input.value;
+      if (input.type === 'number') val = val ? Number(val) : '';
+      nuevoLlamado[field] = val;
+    });
+    inputsDetalle.forEach(input => {
+      const field = input.getAttribute('data-field');
+      let val = input.value;
+      if (input.type === 'number') val = val ? Number(val) : '';
+      nuevoLlamado[field] = val;
+    });
+    // Validación mínima: id y puesto
+    if (!nuevoLlamado.id_llamado || !nuevoLlamado.nombre_puesto) {
+      alert('Debe completar al menos ID y Nombre Puesto');
+      return;
+    }
+    llamados.push(nuevoLlamado);
+    await guardarLlamados();
+    renderTabla();
+  };
 }
 
 document.addEventListener('DOMContentLoaded', () => {
