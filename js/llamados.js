@@ -26,6 +26,7 @@ function calcularConversionFinal(cant_postulantes, cant_finalistas) {
 
 function renderTabla() {
   const tbody = document.querySelector(`#${TABLE_ID} tbody`);
+  if (!tbody) return;
   tbody.innerHTML = '';
   const llamados = obtenerLlamados();
   llamados.forEach(l => {
