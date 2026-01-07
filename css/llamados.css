@@ -137,3 +137,20 @@ td:last-child, th:last-child {
   font-size: 1em;
   padding: 0.3em 0.5em;
 }
+.btn-guardar, .btn-cancelar, .btn-guardar-nuevo {
+  background: #fff;
+  color: #2563eb;
+  border: none;
+  text-decoration: underline;
+  font-weight: 600;
+  font-size: 1em;
+  padding: 0.3em 1.1em;
+  border-radius: 0.5em;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+.btn-guardar:hover, .btn-cancelar:hover, .btn-guardar-nuevo:hover {
+  color: #1d4ed8;
+  background: #e0e7ff;
+  text-decoration: underline;
+}
