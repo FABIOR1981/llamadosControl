@@ -169,36 +169,7 @@ function renderTabla() {
     <td><button class='btn-guardar-nuevo'>Guardar</button></td>
   `;
   tbody.appendChild(trNuevo);
-  // Fila detalle para nuevo llamado
-  const trDetalleNuevo = document.createElement('tr');
-  trDetalleNuevo.className = 'detalle-row';
-  trDetalleNuevo.style.display = '';
-  trDetalleNuevo.innerHTML = `<td colspan="10">
-    <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
-      <strong style="font-size:1.08em; color:#1d4ed8;">Fechas y cantidades por etapa:</strong>
-      <table style="width:auto; margin-top:0.5em; font-size:1em; border-radius:0.75em; overflow:hidden; border-collapse:separate; border-spacing:0; box-shadow:0 2px 8px rgba(30,64,175,0.06);">
-        <tr style="font-weight:700; background:#dbeafe; color:#2563eb;">
-          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Etapa</td>
-          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Fecha</td>
-          <td style="padding:6px 18px; text-align:center; font-family:'Segoe UI',Arial,sans-serif;">Cantidad</td>
-        </tr>
-        <tr style="background:#fff;">
-          <td style="padding:4px 12px;">Postulación</td><td style="padding:4px 12px;"><input type='date' data-field='fecha_postulacion' class='input-tw input-inline' style='width:130px;'></td><td style="text-align:center; padding:4px 12px;"><input type='number' data-field='cant_postulantes' class='input-tw input-inline' style='width:70px;'></td>
-        </tr>
-        <tr style="background:#f1f5f9;">
-          <td style="padding:4px 12px;">Selección</td><td style="padding:4px 12px;"><input type='date' data-field='fecha_seleccion' class='input-tw input-inline' style='width:130px;'></td><td style="text-align:center; padding:4px 12px;"><input type='number' data-field='cant_seleccionados' class='input-tw input-inline' style='width:70px;'></td>
-        </tr>
-        <tr style="background:#fff;">
-          <td style="padding:4px 12px;">Entrevista</td><td style="padding:4px 12px;"><input type='date' data-field='fecha_entrevista' class='input-tw input-inline' style='width:130px;'></td><td style="text-align:center; padding:4px 12px;"><input type='number' data-field='cant_entrevistados' class='input-tw input-inline' style='width:70px;'></td>
-        </tr>
-        <tr style="background:#f1f5f9;">
-          <td style="padding:4px 12px;">Psicotécnico</td><td style="padding:4px 12px;"><input type='date' data-field='fecha_psicotecnico' class='input-tw input-inline' style='width:130px;'></td><td style="text-align:center; padding:4px 12px;"><input type='number' data-field='cant_psicotecnico' class='input-tw input-inline' style='width:70px;'></td>
-        </tr>
-      </table>
-    </div>
-  </td>`;
-  tbody.appendChild(trDetalleNuevo);
-  // Evento guardar nuevo
+  // Ya no se agrega fila de detalle para nuevo llamado
   trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
     const inputs = trNuevo.querySelectorAll('.input-inline, select.input-inline');
     // Solo tomar campos del cabezal
