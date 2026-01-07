@@ -166,7 +166,7 @@ function renderTabla() {
     <td><select data-field='estado' class='input-tw input-inline' style='width:110px;'><option value='Abierto'>Abierto</option><option value='En Curso'>En Curso</option><option value='Pausado'>Pausado</option><option value='Cerrado'>Cerrado</option></select></td>
     <td style="text-align:center;"></td>
     <td style="text-align:center;"></td>
-    <td><button class='btn-guardar-nuevo'>Guardar</button></td>
+    <td><button class='btn-guardar-nuevo'>Nuevo</button></td>
   `;
   tbody.appendChild(trNuevo);
   // Ya no se agrega fila de detalle para nuevo llamado
