@@ -53,7 +53,54 @@ function renderTabla() {
   const tbody = document.querySelector(`#${TABLE_ID} tbody`);
   if (!tbody) return;
   tbody.innerHTML = '';
-  llamados.forEach((l, idx) => {
+  // Ordenar llamados por fecha_inicio descendente
+  const llamadosOrdenados = [...llamados].sort((a, b) => {
+    const fa = a.fecha_inicio ? new Date(a.fecha_inicio) : new Date(0);
+    const fb = b.fecha_inicio ? new Date(b.fecha_inicio) : new Date(0);
+    return fb - fa;
+  });
+  // Fila para nuevo llamado primero
+  const nuevo = {
+    id_llamado: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
+    fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
+  };
+  const trNuevo = document.createElement('tr');
+  trNuevo.className = 'llamado-row';
+  trNuevo.innerHTML = `
+    <td></td>
+    <td><input type='text' data-field='id_llamado' class='input-tw input-inline' style='width:80px;'></td>
+    <td><input type='text' data-field='nombre_puesto' class='input-tw input-inline' style='width:140px;'></td>
+    <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'></td>
+    <td><input type='date' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'></td>
+    <td style="text-align:center;"><input type='number' data-field='cant_finalistas' class='input-tw input-inline' style='width:70px;'></td>
+    <td><select data-field='estado' class='input-tw input-inline' style='width:110px;'><option value='Abierto'>Abierto</option><option value='En Curso'>En Curso</option><option value='Pausado'>Pausado</option><option value='Cerrado'>Cerrado</option></select></td>
+    <td style="text-align:center;"></td>
+    <td style="text-align:center;"></td>
+    <td><button class='btn-guardar-nuevo'>Nuevo</button></td>
+  `;
+  tbody.appendChild(trNuevo);
+  trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
+    const inputs = trNuevo.querySelectorAll('.input-inline, select.input-inline');
+    const nuevoLlamado = {
+      id_llamado: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
+      fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
+    };
+    inputs.forEach(input => {
+      const field = input.getAttribute('data-field');
+      let val = input.value;
+      if (input.type === 'number') val = val ? Number(val) : '';
+      nuevoLlamado[field] = val;
+    });
+    if (!nuevoLlamado.id_llamado || !nuevoLlamado.nombre_puesto) {
+      alert('Debe completar al menos ID y Nombre Puesto');
+      return;
+    }
+    llamados.push(nuevoLlamado);
+    await guardarLlamados();
+    renderTabla();
+  };
+  // Renderizar llamados ordenados
+  llamadosOrdenados.forEach((l, idx) => {
     const tr = document.createElement('tr');
     tr.className = 'llamado-row';
     let isEditing = (editIdx === idx);
@@ -148,51 +195,6 @@ function renderTabla() {
       renderTabla();
     };
   });
-
-  // Renderizar fila para nuevo llamado
-  const nuevo = {
-    id_llamado: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
-    fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
-  };
-  const trNuevo = document.createElement('tr');
-  trNuevo.className = 'llamado-row';
-  trNuevo.innerHTML = `
-    <td></td>
-    <td><input type='text' data-field='id_llamado' class='input-tw input-inline' style='width:80px;'></td>
-    <td><input type='text' data-field='nombre_puesto' class='input-tw input-inline' style='width:140px;'></td>
-    <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'></td>
-    <td><input type='date' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'></td>
-    <td style="text-align:center;"><input type='number' data-field='cant_finalistas' class='input-tw input-inline' style='width:70px;'></td>
-    <td><select data-field='estado' class='input-tw input-inline' style='width:110px;'><option value='Abierto'>Abierto</option><option value='En Curso'>En Curso</option><option value='Pausado'>Pausado</option><option value='Cerrado'>Cerrado</option></select></td>
-    <td style="text-align:center;"></td>
-    <td style="text-align:center;"></td>
-    <td><button class='btn-guardar-nuevo'>Nuevo</button></td>
-  `;
-  tbody.appendChild(trNuevo);
-  // Ya no se agrega fila de detalle para nuevo llamado
-  trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
-    const inputs = trNuevo.querySelectorAll('.input-inline, select.input-inline');
-    // Solo tomar campos del cabezal
-    const nuevoLlamado = {
-      id_llamado: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
-      fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
-    };
-    inputs.forEach(input => {
-      const field = input.getAttribute('data-field');
-      let val = input.value;
-      if (input.type === 'number') val = val ? Number(val) : '';
-      nuevoLlamado[field] = val;
-    });
-    // Validación mínima: id y puesto
-    if (!nuevoLlamado.id_llamado || !nuevoLlamado.nombre_puesto) {
-      alert('Debe completar al menos ID y Nombre Puesto');
-      return;
-    }
-    // El detalle queda vacío
-    llamados.push(nuevoLlamado);
-    await guardarLlamados();
-    renderTabla();
-  };
 }
 
 document.addEventListener('DOMContentLoaded', () => {
