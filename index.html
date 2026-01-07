@@ -8,10 +8,13 @@
   <link rel="stylesheet" href="css/llamados.css">
 </head>
 <body class="bg-gray-100 min-h-screen">
-  <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold mb-6 text-center">Gestión de Llamados Laborales</h1>
-    <div class="bg-white p-6 rounded-lg shadow mb-8">
-      <form id="llamadoForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div class="container mx-auto py-8 font-sans">
+    <div class="flex flex-col items-center mb-8">
+      <h1 class="text-4xl font-extrabold text-blue-800 mb-2 tracking-tight drop-shadow">Gestión de Llamados Laborales</h1>
+      <p class="text-lg text-gray-600">Tablero de seguimiento de procesos de selección</p>
+    </div>
+    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl shadow-lg mb-10 border border-blue-200">
+      <form id="llamadoForm" class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Cabecera -->
         <div>
           <label class="block font-semibold">ID Llamado</label>
@@ -80,33 +83,33 @@
             <option value="Cerrado">Cerrado</option>
           </select>
         </div>
-        <div class="md:col-span-3 flex justify-end items-end">
-          <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Agregar Llamado</button>
+        <div class="md:col-span-3 flex justify-end items-end mt-4">
+          <button type="submit" class="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-8 py-2 rounded-lg shadow hover:from-blue-700 hover:to-blue-500 font-semibold transition-all">➕ Agregar Llamado</button>
         </div>
       </form>
     </div>
-    <div class="bg-white p-6 rounded-lg shadow">
-      <h2 class="text-xl font-semibold mb-4">Llamados Ingresados</h2>
-      <div class="overflow-x-auto">
-        <table class="min-w-full text-sm text-left" id="tablaLlamados">
-          <thead>
-            <tr class="bg-gray-200">
-              <th>ID</th>
-              <th>Puesto</th>
-              <th>Inicio</th>
-              <th>Fin</th>
-              <th>Postulación</th>
-              <th>Postulantes</th>
-              <th>Selección</th>
-              <th>Seleccionados</th>
-              <th>Entrevista</th>
-              <th>Entrevistados</th>
-              <th>Psicotécnico</th>
-              <th>Psicotécnico OK</th>
-              <th>Finalistas</th>
-              <th>Estado</th>
-              <th>Días Activos</th>
-              <th>% Conversión Final</th>
+    <div class="bg-white p-8 rounded-2xl shadow-lg border border-blue-100">
+      <h2 class="text-2xl font-bold mb-6 text-blue-700 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-blue-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 17v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m16-2a4 4 0 00-4-4h-1a4 4 0 00-4 4v2m6-2v2m0 0a4 4 0 01-4 4H9a4 4 0 01-4-4v-2m6 2v2m0 0a4 4 0 004-4v-2m0 0a4 4 0 00-4-4h-1a4 4 0 00-4 4v2' /></svg>Llamados Ingresados</h2>
+      <div class="overflow-x-auto rounded-xl border border-blue-100">
+        <table class="min-w-full text-sm text-left bg-white rounded-xl">
+          <thead class="sticky top-0 z-10 bg-blue-100">
+            <tr class="">
+              <th class="px-3 py-2">ID</th>
+              <th class="px-3 py-2">Puesto</th>
+              <th class="px-3 py-2">Inicio</th>
+              <th class="px-3 py-2">Fin</th>
+              <th class="px-3 py-2">Postulación</th>
+              <th class="px-3 py-2">Postulantes</th>
+              <th class="px-3 py-2">Selección</th>
+              <th class="px-3 py-2">Seleccionados</th>
+              <th class="px-3 py-2">Entrevista</th>
+              <th class="px-3 py-2">Entrevistados</th>
+              <th class="px-3 py-2">Psicotécnico</th>
+              <th class="px-3 py-2">Psicotécnico OK</th>
+              <th class="px-3 py-2">Finalistas</th>
+              <th class="px-3 py-2">Estado</th>
+              <th class="px-3 py-2">Días Activos</th>
+              <th class="px-3 py-2">% Conversión Final</th>
             </tr>
           </thead>
           <tbody>

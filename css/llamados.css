@@ -1,4 +1,28 @@
 /* Estilos personalizados para la app de llamados */
 .input-tw {
-  @apply border border-gray-300 rounded px-2 py-1 w-full focus:outline-none focus:ring-2 focus:ring-blue-400;
+  @apply border border-blue-200 bg-white rounded-lg px-3 py-2 w-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-150;
+}
+
+/* Mejorar la tabla */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+thead th {
+  font-weight: 700;
+  color: #2563eb;
+  background: #e0e7ff;
+  border-bottom: 2px solid #c7d2fe;
+}
+tbody tr {
+  transition: background 0.2s;
+}
+tbody tr:hover {
+  background: #f0f9ff;
+}
+td, th {
+  border-right: 1px solid #e0e7ef;
+}
+td:last-child, th:last-child {
+  border-right: none;
 }
