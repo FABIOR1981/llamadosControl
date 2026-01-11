@@ -61,7 +61,7 @@ function renderTabla() {
   });
   // Fila para nuevo llamado primero
   const nuevo = {
-    id_llamado: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
+    id_llamado: '', empresa: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
     fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
   };
   const trNuevo = document.createElement('tr');
@@ -69,6 +69,7 @@ function renderTabla() {
   trNuevo.innerHTML = `
     <td></td>
     <td><input type='text' data-field='id_llamado' class='input-tw input-inline' style='width:80px;'></td>
+    <td><input type='text' data-field='empresa' class='input-tw input-inline' style='width:120px;'></td>
     <td><input type='text' data-field='nombre_puesto' class='input-tw input-inline' style='width:140px;'></td>
     <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'></td>
     <td><input type='date' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'></td>
@@ -82,7 +83,7 @@ function renderTabla() {
   trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
     const inputs = trNuevo.querySelectorAll('.input-inline, select.input-inline');
     const nuevoLlamado = {
-      id_llamado: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
+      id_llamado: '', empresa: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
       fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
     };
     inputs.forEach(input => {
@@ -107,6 +108,7 @@ function renderTabla() {
     tr.innerHTML = `
       <td><button class="toggle-detalle" title="Ver detalle" data-idx="${idx}">▶</button></td>
       <td>${l.id_llamado || ''}</td>
+      <td>${l.empresa || ''}</td>
       <td>${l.nombre_puesto || ''}</td>
       <td>${isEditing ? `<input type='date' value='${l.fecha_inicio ? new Date(l.fecha_inicio).toISOString().slice(0,10) : ''}' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_inicio)}</td>
       <td>${isEditing ? `<input type='date' value='${l.fecha_fin ? new Date(l.fecha_fin).toISOString().slice(0,10) : ''}' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_fin)}</td>
