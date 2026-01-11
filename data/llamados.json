@@ -110,5 +110,21 @@
     "cant_entrevistados": "",
     "fecha_psicotecnico": "",
     "cant_psicotecnico": ""
+  },
+  {
+    "id_llamado": "L-01A",
+    "nombre_puesto": "Vendedor para salón",
+    "fecha_inicio": "2026-01-05",
+    "fecha_fin": "",
+    "cant_finalistas": "",
+    "estado": "Abierto",
+    "fecha_postulacion": "",
+    "cant_postulantes": "",
+    "fecha_seleccion": "",
+    "cant_seleccionados": "",
+    "fecha_entrevista": "",
+    "cant_entrevistados": "",
+    "fecha_psicotecnico": "",
+    "cant_psicotecnico": ""
   }
 ]
