@@ -10,10 +10,10 @@
     "cant_postulantes": "",
     "fecha_seleccion": "2026-01-10",
     "cant_seleccionados": 8,
-    "fecha_entrevista": "2026-01-12",
-    "cant_entrevistados": "",
-    "fecha_psicotecnico": "",
-    "cant_psicotecnico": "",
+    "fecha_entrevista": "2026-01-11",
+    "cant_entrevistados": 8,
+    "fecha_psicotecnico": "2026-01-12",
+    "cant_psicotecnico": 4,
     "empresa": "A.C.E."
   }
 ]
