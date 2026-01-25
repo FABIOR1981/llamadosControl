@@ -35,11 +35,28 @@ function calcularConversionFinal(cant_postulantes, cant_finalistas) {
   return ((cant_finalistas / cant_postulantes) * 100).toFixed(1) + '%';
 }
 
+
+// Formatea fecha para mostrar en tabla, sin errores de zona horaria
 function formatFecha(fecha) {
   if (!fecha) return '';
-  const d = new Date(fecha);
-  if (isNaN(d)) return fecha;
-  return d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  // yyyy-mm-dd
+  if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+    const [y, m, d] = fecha.split('-');
+    return `${d}/${m}/${y}`;
+  }
+  // dd/mm/yyyy
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) {
+    return fecha;
+  }
+  // Otro formato, intentar parsear
+  const dt = new Date(fecha);
+  if (!isNaN(dt)) {
+    const day = String(dt.getDate()).padStart(2, '0');
+    const month = String(dt.getMonth() + 1).padStart(2, '0');
+    const year = dt.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+  return fecha;
 }
 
 
