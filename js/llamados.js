@@ -88,8 +88,8 @@ function renderTabla() {
     <td><input type='text' data-field='id_llamado' class='input-tw input-inline' style='width:80px;'></td>
     <td><input type='text' data-field='empresa' class='input-tw input-inline' style='width:120px;'></td>
     <td><input type='text' data-field='nombre_puesto' class='input-tw input-inline' style='width:140px;'></td>
-    <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'></td>
-    <td><input type='date' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'></td>
+    <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;' value='${toInputDate(nuevo.fecha_inicio)}'></td>
+    <td><input type='date' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;' value='${toInputDate(nuevo.fecha_fin)}'></td>
     <td style="text-align:center;"><input type='number' data-field='cant_finalistas' class='input-tw input-inline' style='width:70px;'></td>
     <td><select data-field='estado' class='input-tw input-inline' style='width:110px;'><option value='Abierto'>Abierto</option><option value='En Curso'>En Curso</option><option value='Pausado'>Pausado</option><option value='Cerrado'>Cerrado</option></select></td>
     <td style="text-align:center;"></td>
