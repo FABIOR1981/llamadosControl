@@ -95,29 +95,14 @@ function renderTabla() {
   });
   // Fila para nuevo llamado primero
   const nuevo = {
-    id_llamado: '',
-    publicacion: '',
-    empresa: '',
-    nombre_puesto: '',
-    fecha_inicio: '',
-    fecha_fin: '',
-    cant_finalistas: '',
-    estado: 'Abierto',
-    fecha_postulacion: '',
-    cant_postulantes: '',
-    fecha_seleccion: '',
-    cant_seleccionados: '',
-    fecha_entrevista: '',
-    cant_entrevistados: '',
-    fecha_psicotecnico: '',
-    cant_psicotecnico: ''
+    id_llamado: '', empresa: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
+    fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
   };
   const trNuevo = document.createElement('tr');
   trNuevo.className = 'llamado-row';
   trNuevo.innerHTML = `
     <td></td>
     <td><input type='text' data-field='id_llamado' class='input-tw input-inline' style='width:80px;'></td>
-    <td><input type='text' data-field='publicacion' class='input-tw input-inline' style='width:120px;'></td>
     <td><input type='text' data-field='empresa' class='input-tw input-inline' style='width:120px;'></td>
     <td><input type='text' data-field='nombre_puesto' class='input-tw input-inline' style='width:140px;'></td>
     <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;' value='${toInputDate(nuevo.fecha_inicio)}'></td>
@@ -157,7 +142,6 @@ function renderTabla() {
     tr.innerHTML = `
       <td><button class="toggle-detalle" title="Ver detalle" data-idx="${idx}">▶</button></td>
       <td>${l.id_llamado || ''}</td>
-      <td>${isEditing ? `<input type='text' value='${l.publicacion || ''}' data-field='publicacion' class='input-tw input-inline' style='width:120px;'>` : (l.publicacion || '')}</td>
       <td>${l.empresa || ''}</td>
       <td>${l.nombre_puesto || ''}</td>
       <td>${isEditing ? `<input type='date' value='${toInputDate(l.fecha_inicio)}' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_inicio)}</td>
