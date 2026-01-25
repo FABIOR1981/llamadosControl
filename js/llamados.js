@@ -42,6 +42,23 @@ function formatFecha(fecha) {
   return d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
+
+// Convierte fecha dd/mm/yyyy o yyyy-mm-dd a yyyy-mm-dd para input type date
+function toInputDate(fecha) {
+  if (!fecha) return '';
+  // Si ya es formato yyyy-mm-dd
+  if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return fecha;
+  // Si es formato dd/mm/yyyy
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(fecha)) {
+    const [d, m, y] = fecha.split('/');
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  }
+  // Si es formato Date
+  const d = new Date(fecha);
+  if (!isNaN(d)) return d.toISOString().slice(0,10);
+  return '';
+}
+
 let editIdx = null;
 
 window.editarLlamado = function(idx) {
@@ -110,8 +127,8 @@ function renderTabla() {
       <td>${l.id_llamado || ''}</td>
       <td>${l.empresa || ''}</td>
       <td>${l.nombre_puesto || ''}</td>
-      <td>${isEditing ? `<input type='date' value='${l.fecha_inicio ? new Date(l.fecha_inicio).toISOString().slice(0,10) : ''}' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_inicio)}</td>
-      <td>${isEditing ? `<input type='date' value='${l.fecha_fin ? new Date(l.fecha_fin).toISOString().slice(0,10) : ''}' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_fin)}</td>
+      <td>${isEditing ? `<input type='date' value='${toInputDate(l.fecha_inicio)}' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_inicio)}</td>
+      <td>${isEditing ? `<input type='date' value='${toInputDate(l.fecha_fin)}' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_fin)}</td>
       <td style="text-align:center;">${isEditing ? `<input type='number' value='${l.cant_finalistas || ''}' data-field='cant_finalistas' class='input-tw input-inline' style='width:70px;'>` : (l.cant_finalistas || '')}</td>
       <td>${isEditing ? `<select data-field='estado' class='input-tw input-inline' style='width:110px;'><option value='Abierto' ${l.estado==='Abierto'?'selected':''}>Abierto</option><option value='En Curso' ${l.estado==='En Curso'?'selected':''}>En Curso</option><option value='Pausado' ${l.estado==='Pausado'?'selected':''}>Pausado</option><option value='Cerrado' ${l.estado==='Cerrado'?'selected':''}>Cerrado</option></select>` : (l.estado || '')}</td>
       <td style="text-align:center;">${calcularDiasActivos(l.fecha_inicio, l.fecha_fin)}</td>
@@ -134,16 +151,16 @@ function renderTabla() {
             <td style="padding:6px 18px; text-align:center; font-family:'Segoe UI',Arial,sans-serif;">Cantidad</td>
           </tr>
           <tr style="background:#fff;">
-            <td style="padding:4px 12px;">Postulación</td><td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${l.fecha_postulacion ? new Date(l.fecha_postulacion).toISOString().slice(0,10) : ''}' data-field='fecha_postulacion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_postulacion)}</td><td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_postulantes || ''}' data-field='cant_postulantes' class='input-tw input-inline' style='width:70px;'>` : (l.cant_postulantes || '')}</td>
+            <td style="padding:4px 12px;">Postulación</td><td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_postulacion)}' data-field='fecha_postulacion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_postulacion)}</td><td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_postulantes || ''}' data-field='cant_postulantes' class='input-tw input-inline' style='width:70px;'>` : (l.cant_postulantes || '')}</td>
           </tr>
           <tr style="background:#f1f5f9;">
-            <td style="padding:4px 12px;">Selección</td><td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${l.fecha_seleccion ? new Date(l.fecha_seleccion).toISOString().slice(0,10) : ''}' data-field='fecha_seleccion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_seleccion)}</td><td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_seleccionados || ''}' data-field='cant_seleccionados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_seleccionados || '')}</td>
+            <td style="padding:4px 12px;">Selección</td><td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_seleccion)}' data-field='fecha_seleccion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_seleccion)}</td><td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_seleccionados || ''}' data-field='cant_seleccionados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_seleccionados || '')}</td>
           </tr>
           <tr style="background:#fff;">
-            <td style="padding:4px 12px;">Entrevista</td><td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${l.fecha_entrevista ? new Date(l.fecha_entrevista).toISOString().slice(0,10) : ''}' data-field='fecha_entrevista' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_entrevista)}</td><td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_entrevistados || ''}' data-field='cant_entrevistados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_entrevistados || '')}</td>
+            <td style="padding:4px 12px;">Entrevista</td><td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_entrevista)}' data-field='fecha_entrevista' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_entrevista)}</td><td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_entrevistados || ''}' data-field='cant_entrevistados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_entrevistados || '')}</td>
           </tr>
           <tr style="background:#f1f5f9;">
-            <td style="padding:4px 12px;">Psicotécnico</td><td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${l.fecha_psicotecnico ? new Date(l.fecha_psicotecnico).toISOString().slice(0,10) : ''}' data-field='fecha_psicotecnico' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_psicotecnico)}</td><td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_psicotecnico || ''}' data-field='cant_psicotecnico' class='input-tw input-inline' style='width:70px;'>` : (l.cant_psicotecnico || '')}</td>
+            <td style="padding:4px 12px;">Psicotécnico</td><td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_psicotecnico)}' data-field='fecha_psicotecnico' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_psicotecnico)}</td><td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_psicotecnico || ''}' data-field='cant_psicotecnico' class='input-tw input-inline' style='width:70px;'>` : (l.cant_psicotecnico || '')}</td>
           </tr>
         </table>
       </div>
