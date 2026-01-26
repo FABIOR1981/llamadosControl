@@ -1,3 +1,49 @@
+/* Anchos personalizados para inputs */
+.w-80 { width: 80px; }
+.w-120 { width: 120px; }
+.w-130 { width: 130px; }
+.w-140 { width: 140px; }
+.w-70 { width: 70px; }
+.w-110 { width: 110px; }
+
+/* Centrado de texto */
+.text-center { text-align: center; }
+
+/* Altura para textarea */
+.h-2em { height: 2em; }
+
+/* Fondo personalizado para filas */
+.bg-white { background: #fff; }
+.bg-f1f5f9 { background: #f1f5f9; }
+
+/* Detalle block y tabla */
+.detalle-block {
+  padding: 0.5em 1em;
+  background: #f8fafc;
+  border-radius: 0.5em;
+}
+.tabla-detalle {
+  width: auto;
+  margin-top: 0.5em;
+  font-size: 1em;
+  border-radius: 0.75em;
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: 0 2px 8px rgba(30,64,175,0.06);
+}
+.tr-header {
+  font-weight: 700;
+  background: #dbeafe;
+  color: #2563eb;
+}
+.td-etapa, .td-fecha, .td-cantidad, .td-obs {
+  padding: 6px 18px;
+  font-family: 'Segoe UI',Arial,sans-serif;
+}
+.detalle-postulacion td, .detalle-seleccion td, .detalle-entrevista td, .detalle-psicotecnico td {
+  padding: 4px 12px;
+}
 /* Estilos personalizados para la app de llamados */
 
 .input-tw {
