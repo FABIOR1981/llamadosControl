@@ -93,33 +93,18 @@ function renderTabla() {
     const fb = b.fecha_inicio ? new Date(b.fecha_inicio) : new Date(0);
     return fb - fa;
   });
-  // Fila para nuevo llamado primero
+
+  // Fila para nuevo llamado primero usando template
   const nuevo = {
     id_llamado: '', empresa: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
     fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
   };
-  const trNuevo = document.createElement('tr');
-  trNuevo.className = 'llamado-row';
-  trNuevo.innerHTML = `
-    <td></td>
-    <td><input type='text' data-field='id_llamado' class='input-tw input-inline' style='width:80px;'></td>
-    <td><input type='text' data-field='empresa' class='input-tw input-inline' style='width:120px;'></td>
-    <td><input type='text' data-field='nombre_puesto' class='input-tw input-inline' style='width:140px;'></td>
-    <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;' value='${toInputDate(nuevo.fecha_inicio)}'></td>
-    <td><input type='date' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;' value='${toInputDate(nuevo.fecha_fin)}'></td>
-    <td style="text-align:center;"><input type='number' data-field='cant_finalistas' class='input-tw input-inline' style='width:70px;'></td>
-    <td><select data-field='estado' class='input-tw input-inline' style='width:110px;'><option value='Abierto'>Abierto</option><option value='En Curso'>En Curso</option><option value='Pausado'>Pausado</option><option value='Cerrado'>Cerrado</option></select></td>
-    <td style="text-align:center;"></td>
-    <td style="text-align:center;"></td>
-    <td><button class='btn-guardar-nuevo'>Nuevo</button></td>
-  `;
+  const tplNuevo = document.getElementById('template-fila-nueva');
+  const trNuevo = tplNuevo.content.cloneNode(true).children[0];
   tbody.appendChild(trNuevo);
   trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
     const inputs = trNuevo.querySelectorAll('.input-inline, select.input-inline');
-    const nuevoLlamado = {
-      id_llamado: '', empresa: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
-      fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
-    };
+    const nuevoLlamado = { ...nuevo };
     inputs.forEach(input => {
       const field = input.getAttribute('data-field');
       let val = input.value;
@@ -134,11 +119,13 @@ function renderTabla() {
     await guardarLlamados();
     renderTabla();
   };
-  // Renderizar llamados ordenados
+
+  // Renderizar llamados ordenados usando template
   llamadosOrdenados.forEach((l, idx) => {
-    const tr = document.createElement('tr');
-    tr.className = 'llamado-row';
+    const tplFila = document.getElementById('template-fila-llamado');
+    const tr = tplFila.content.cloneNode(true).children[0];
     let isEditing = (editIdx === idx);
+    // Generar contenido dinámico para la fila principal
     tr.innerHTML = `
       <td><button class="toggle-detalle" title="Ver detalle" data-idx="${idx}">▶</button></td>
       <td>${l.id_llamado || ''}</td>
@@ -154,47 +141,45 @@ function renderTabla() {
     `;
     tbody.appendChild(tr);
 
-    // Fila detalle (oculta por defecto)
-    const trDetalle = document.createElement('tr');
-    trDetalle.className = 'detalle-row';
-    trDetalle.style.display = 'none';
-    trDetalle.innerHTML = `<td colspan="10">
-      <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
-        <strong style="font-size:1.08em; color:#1d4ed8;">Fechas y cantidades por etapa:</strong>
-        <table style="width:auto; margin-top:0.5em; font-size:1em; border-radius:0.75em; overflow:hidden; border-collapse:separate; border-spacing:0; box-shadow:0 2px 8px rgba(30,64,175,0.06);">
-          <tr style="font-weight:700; background:#dbeafe; color:#2563eb;">
-            <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Etapa</td>
-            <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Fecha</td>
-            <td style="padding:6px 18px; text-align:center; font-family:'Segoe UI',Arial,sans-serif;">Cantidad</td>
-            <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Observaciones</td>
-          </tr>
-          <tr style="background:#fff;">
-            <td style="padding:4px 12px;">Postulación</td>
-            <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_postulacion)}' data-field='fecha_postulacion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_postulacion)}</td>
-            <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_postulantes || ''}' data-field='cant_postulantes' class='input-tw input-inline' style='width:70px;'>` : (l.cant_postulantes || '')}</td>
-            <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_postulacion' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_postulacion||''}</textarea>` : (l.obs_postulacion||'')}</td>
-          </tr>
-          <tr style="background:#f1f5f9;">
-            <td style="padding:4px 12px;">Selección</td>
-            <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_seleccion)}' data-field='fecha_seleccion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_seleccion)}</td>
-            <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_seleccionados || ''}' data-field='cant_seleccionados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_seleccionados || '')}</td>
-            <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_seleccion' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_seleccion||''}</textarea>` : (l.obs_seleccion||'')}</td>
-          </tr>
-          <tr style="background:#fff;">
-            <td style="padding:4px 12px;">Entrevista</td>
-            <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_entrevista)}' data-field='fecha_entrevista' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_entrevista)}</td>
-            <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_entrevistados || ''}' data-field='cant_entrevistados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_entrevistados || '')}</td>
-            <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_entrevista' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_entrevista||''}</textarea>` : (l.obs_entrevista||'')}</td>
-          </tr>
-          <tr style="background:#f1f5f9;">
-            <td style="padding:4px 12px;">Psicotécnico</td>
-            <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_psicotecnico)}' data-field='fecha_psicotecnico' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_psicotecnico)}</td>
-            <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_psicotecnico || ''}' data-field='cant_psicotecnico' class='input-tw input-inline' style='width:70px;'>` : (l.cant_psicotecnico || '')}</td>
-            <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_psicotecnico' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_psicotecnico||''}</textarea>` : (l.obs_psicotecnico||'')}</td>
-          </tr>
-        </table>
-      </div>
-    </td>`;
+    // Fila detalle usando template
+    const tplDetalle = document.getElementById('template-detalle-llamado');
+    const trDetalle = tplDetalle.content.cloneNode(true).children[0];
+    // Generar tabla de detalle dinámicamente
+    trDetalle.querySelector('.detalle-block').innerHTML = `
+      <strong style="font-size:1.08em; color:#1d4ed8;">Fechas y cantidades por etapa:</strong>
+      <table style="width:auto; margin-top:0.5em; font-size:1em; border-radius:0.75em; overflow:hidden; border-collapse:separate; border-spacing:0; box-shadow:0 2px 8px rgba(30,64,175,0.06);">
+        <tr style="font-weight:700; background:#dbeafe; color:#2563eb;">
+          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Etapa</td>
+          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Fecha</td>
+          <td style="padding:6px 18px; text-align:center; font-family:'Segoe UI',Arial,sans-serif;">Cantidad</td>
+          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Observaciones</td>
+        </tr>
+        <tr style="background:#fff;">
+          <td style="padding:4px 12px;">Postulación</td>
+          <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_postulacion)}' data-field='fecha_postulacion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_postulacion)}</td>
+          <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_postulantes || ''}' data-field='cant_postulantes' class='input-tw input-inline' style='width:70px;'>` : (l.cant_postulantes || '')}</td>
+          <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_postulacion' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_postulacion||''}</textarea>` : (l.obs_postulacion||'')}</td>
+        </tr>
+        <tr style="background:#f1f5f9;">
+          <td style="padding:4px 12px;">Selección</td>
+          <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_seleccion)}' data-field='fecha_seleccion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_seleccion)}</td>
+          <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_seleccionados || ''}' data-field='cant_seleccionados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_seleccionados || '')}</td>
+          <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_seleccion' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_seleccion||''}</textarea>` : (l.obs_seleccion||'')}</td>
+        </tr>
+        <tr style="background:#fff;">
+          <td style="padding:4px 12px;">Entrevista</td>
+          <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_entrevista)}' data-field='fecha_entrevista' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_entrevista)}</td>
+          <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_entrevistados || ''}' data-field='cant_entrevistados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_entrevistados || '')}</td>
+          <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_entrevista' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_entrevista||''}</textarea>` : (l.obs_entrevista||'')}</td>
+        </tr>
+        <tr style="background:#f1f5f9;">
+          <td style="padding:4px 12px;">Psicotécnico</td>
+          <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_psicotecnico)}' data-field='fecha_psicotecnico' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_psicotecnico)}</td>
+          <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_psicotecnico || ''}' data-field='cant_psicotecnico' class='input-tw input-inline' style='width:70px;'>` : (l.cant_psicotecnico || '')}</td>
+          <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_psicotecnico' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_psicotecnico||''}</textarea>` : (l.obs_psicotecnico||'')}</td>
+        </tr>
+      </table>
+    `;
     tbody.appendChild(trDetalle);
   });
 
@@ -245,7 +230,6 @@ function renderTabla() {
     };
   });
 }
-
 document.addEventListener('DOMContentLoaded', () => {
   obtenerLlamados();
   // Eliminado: ya no existe el formulario de alta

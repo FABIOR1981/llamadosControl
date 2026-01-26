@@ -37,6 +37,40 @@
         </table>
       </div>
     </div>
+    <!-- Templates para filas y detalles -->
+    <template id="template-fila-nueva">
+      <tr class="llamado-row">
+        <td></td>
+        <td><input type='text' data-field='id_llamado' class='input-tw input-inline' style='width:80px;'></td>
+        <td><input type='text' data-field='empresa' class='input-tw input-inline' style='width:120px;'></td>
+        <td><input type='text' data-field='nombre_puesto' class='input-tw input-inline' style='width:140px;'></td>
+        <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'></td>
+        <td><input type='date' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'></td>
+        <td style="text-align:center;"><input type='number' data-field='cant_finalistas' class='input-tw input-inline' style='width:70px;'></td>
+        <td><select data-field='estado' class='input-tw input-inline' style='width:110px;'><option value='Abierto'>Abierto</option><option value='En Curso'>En Curso</option><option value='Pausado'>Pausado</option><option value='Cerrado'>Cerrado</option></select></td>
+        <td style="text-align:center;"></td>
+        <td style="text-align:center;"></td>
+        <td><button class='btn-guardar-nuevo'>Nuevo</button></td>
+      </tr>
+    </template>
+    <template id="template-fila-llamado">
+      <tr class="llamado-row">
+        <!-- contenido generado dinámicamente por JS -->
+      </tr>
+    </template>
+    <template id="template-detalle-llamado">
+      <tr class="detalle-row" style="display:none;">
+        <td colspan="10">
+          <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
+            <!-- tabla de detalle generada por JS -->
+          </div>
+        </td>
+      </tr>
+    </template>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
   <script src="js/llamados.js"></script>
 </body>
