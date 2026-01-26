@@ -17,8 +17,8 @@
     "empresa": "A.C.E.",
     "obs_postulacion": "BuscoJobs",
     "obs_seleccion": "",
-    "obs_entrevista": "Presencial",
-    "obs_psicotecnico": "Bender ,MBTI...etc"
-    
+    "obs_entrevista": "Presencial,virtual",
+    "obs_psicotecnico": "Bender ,MBTI...etc",
+    "null": "Cerrado"
   }
 ]
