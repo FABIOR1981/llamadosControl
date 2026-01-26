@@ -19,5 +19,22 @@
     "obs_seleccion": "",
     "obs_entrevista": "Presencial,virtual",
     "obs_psicotecnico": "Bender ,MBTI...etc"
+  },
+  {
+    "id_llamado": "L-01AA",
+    "empresa": "Prueba",
+    "nombre_puesto": "Gerencia",
+    "fecha_inicio": "2026-01-15",
+    "fecha_fin": "2026-01-24",
+    "cant_finalistas": 1,
+    "estado": "Pausado",
+    "fecha_postulacion": "",
+    "cant_postulantes": "",
+    "fecha_seleccion": "",
+    "cant_seleccionados": "",
+    "fecha_entrevista": "",
+    "cant_entrevistados": "",
+    "fecha_psicotecnico": "",
+    "cant_psicotecnico": ""
   }
 ]
