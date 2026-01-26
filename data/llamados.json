@@ -18,6 +18,7 @@
     "obs_postulacion": "BuscoJobs",
     "obs_seleccion": "",
     "obs_entrevista": "Presencial",
-    "obs_psicotecnico": "Bender ,MBTI..."
+    "obs_psicotecnico": "Bender ,MBTI...",
+    "null": "Bender ,MBTI...etc"
   }
 ]
