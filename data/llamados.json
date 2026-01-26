@@ -2,10 +2,10 @@
   {
     "id_llamado": "L-01A",
     "nombre_puesto": "Vendedor para salón",
-    "fecha_inicio": "2026-01-15",
+    "fecha_inicio": "2026-01-10",
     "fecha_fin": "2026-01-24",
     "cant_finalistas": 1,
-    "estado": "Cerrado",
+    "estado": "Pausado",
     "fecha_postulacion": "",
     "cant_postulantes": "",
     "fecha_seleccion": "",
