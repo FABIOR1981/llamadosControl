@@ -5,7 +5,7 @@
     "fecha_inicio": "2026-01-05",
     "fecha_fin": "2026-01-14",
     "cant_finalistas": 4,
-    "estado": "Pausado",
+    "estado": "Cerrado",
     "fecha_postulacion": "",
     "cant_postulantes": 120,
     "fecha_seleccion": "2026-01-10",
@@ -19,6 +19,5 @@
     "obs_seleccion": "",
     "obs_entrevista": "Presencial,virtual",
     "obs_psicotecnico": "Bender ,MBTI...etc"
-   
   }
 ]
