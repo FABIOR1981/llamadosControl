@@ -125,62 +125,96 @@ function renderTabla() {
     const tplFila = document.getElementById('template-fila-llamado');
     const tr = tplFila.content.cloneNode(true).children[0];
     let isEditing = (editIdx === idx);
-    // Generar contenido dinámico para la fila principal
-    tr.innerHTML = `
-      <td><button class="toggle-detalle" title="Ver detalle" data-idx="${idx}">▶</button></td>
-      <td>${l.id_llamado || ''}</td>
-      <td>${l.empresa || ''}</td>
-      <td>${l.nombre_puesto || ''}</td>
-      <td>${isEditing ? `<input type='date' value='${toInputDate(l.fecha_inicio)}' data-field='fecha_inicio' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_inicio)}</td>
-      <td>${isEditing ? `<input type='date' value='${toInputDate(l.fecha_fin)}' data-field='fecha_fin' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_fin)}</td>
-      <td style="text-align:center;">${isEditing ? `<input type='number' value='${l.cant_finalistas || ''}' data-field='cant_finalistas' class='input-tw input-inline' style='width:70px;'>` : (l.cant_finalistas || '')}</td>
-      <td>${isEditing ? `<select data-field='estado' class='input-tw input-inline' style='width:110px;'><option value='Abierto' ${l.estado==='Abierto'?'selected':''}>Abierto</option><option value='En Curso' ${l.estado==='En Curso'?'selected':''}>En Curso</option><option value='Pausado' ${l.estado==='Pausado'?'selected':''}>Pausado</option><option value='Cerrado' ${l.estado==='Cerrado'?'selected':''}>Cerrado</option></select>` : (l.estado || '')}</td>
-      <td style="text-align:center;">${calcularDiasActivos(l.fecha_inicio, l.fecha_fin)}</td>
-      <td style="text-align:center;">${calcularConversionFinal(l.cant_postulantes, l.cant_finalistas)}</td>
-      <td>${isEditing ? `<button class='btn-guardar' data-idx='${idx}'>Guardar</button> <button class='btn-cancelar' data-idx='${idx}'>Cancelar</button>` : `<button class="text-blue-600 underline hover:text-blue-900" onclick="editarLlamado(${idx})">Editar</button>`}</td>
-    `;
+    // Asignar datos a la fila principal
+    tr.querySelector('.td-id').textContent = l.id_llamado || '';
+    tr.querySelector('.td-empresa').textContent = l.empresa || '';
+    tr.querySelector('.td-nombre').textContent = l.nombre_puesto || '';
+    tr.querySelector('.input-fecha-inicio').value = toInputDate(l.fecha_inicio);
+    tr.querySelector('.input-fecha-fin').value = toInputDate(l.fecha_fin);
+    tr.querySelector('.input-finalistas').value = l.cant_finalistas || '';
+    tr.querySelector('.input-estado').value = l.estado || 'Abierto';
+    tr.querySelector('.td-dias').textContent = calcularDiasActivos(l.fecha_inicio, l.fecha_fin);
+    tr.querySelector('.td-conversion').textContent = calcularConversionFinal(l.cant_postulantes, l.cant_finalistas);
+
+    // Habilitar edición si corresponde
+    const editarBtn = tr.querySelector('.btn-editar');
+    const guardarBtn = tr.querySelector('.btn-guardar');
+    const cancelarBtn = tr.querySelector('.btn-cancelar');
+    const inputs = tr.querySelectorAll('input, select');
+    if (isEditing) {
+      inputs.forEach(el => el.disabled = false);
+      editarBtn.style.display = 'none';
+      guardarBtn.style.display = '';
+      cancelarBtn.style.display = '';
+    } else {
+      inputs.forEach(el => el.disabled = true);
+      editarBtn.style.display = '';
+      guardarBtn.style.display = 'none';
+      cancelarBtn.style.display = 'none';
+    }
+
+    editarBtn.onclick = () => {
+      editIdx = idx;
+      renderTabla();
+    };
+    guardarBtn.onclick = async () => {
+      l.fecha_inicio = tr.querySelector('.input-fecha-inicio').value;
+      l.fecha_fin = tr.querySelector('.input-fecha-fin').value;
+      l.cant_finalistas = tr.querySelector('.input-finalistas').value;
+      l.estado = tr.querySelector('.input-estado').value;
+      await guardarLlamados();
+      editIdx = null;
+      renderTabla();
+    };
+    cancelarBtn.onclick = () => {
+      editIdx = null;
+      renderTabla();
+    };
+
     tbody.appendChild(tr);
 
     // Fila detalle usando template
     const tplDetalle = document.getElementById('template-detalle-llamado');
     const trDetalle = tplDetalle.content.cloneNode(true).children[0];
-    // Generar tabla de detalle dinámicamente
-    trDetalle.querySelector('.detalle-block').innerHTML = `
-      <strong style="font-size:1.08em; color:#1d4ed8;">Fechas y cantidades por etapa:</strong>
-      <table style="width:auto; margin-top:0.5em; font-size:1em; border-radius:0.75em; overflow:hidden; border-collapse:separate; border-spacing:0; box-shadow:0 2px 8px rgba(30,64,175,0.06);">
-        <tr style="font-weight:700; background:#dbeafe; color:#2563eb;">
-          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Etapa</td>
-          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Fecha</td>
-          <td style="padding:6px 18px; text-align:center; font-family:'Segoe UI',Arial,sans-serif;">Cantidad</td>
-          <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Observaciones</td>
-        </tr>
-        <tr style="background:#fff;">
-          <td style="padding:4px 12px;">Postulación</td>
-          <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_postulacion)}' data-field='fecha_postulacion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_postulacion)}</td>
-          <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_postulantes || ''}' data-field='cant_postulantes' class='input-tw input-inline' style='width:70px;'>` : (l.cant_postulantes || '')}</td>
-          <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_postulacion' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_postulacion||''}</textarea>` : (l.obs_postulacion||'')}</td>
-        </tr>
-        <tr style="background:#f1f5f9;">
-          <td style="padding:4px 12px;">Selección</td>
-          <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_seleccion)}' data-field='fecha_seleccion' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_seleccion)}</td>
-          <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_seleccionados || ''}' data-field='cant_seleccionados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_seleccionados || '')}</td>
-          <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_seleccion' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_seleccion||''}</textarea>` : (l.obs_seleccion||'')}</td>
-        </tr>
-        <tr style="background:#fff;">
-          <td style="padding:4px 12px;">Entrevista</td>
-          <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_entrevista)}' data-field='fecha_entrevista' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_entrevista)}</td>
-          <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_entrevistados || ''}' data-field='cant_entrevistados' class='input-tw input-inline' style='width:70px;'>` : (l.cant_entrevistados || '')}</td>
-          <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_entrevista' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_entrevista||''}</textarea>` : (l.obs_entrevista||'')}</td>
-        </tr>
-        <tr style="background:#f1f5f9;">
-          <td style="padding:4px 12px;">Psicotécnico</td>
-          <td style="padding:4px 12px;">${isEditing ? `<input type='date' value='${toInputDate(l.fecha_psicotecnico)}' data-field='fecha_psicotecnico' class='input-tw input-inline' style='width:130px;'>` : formatFecha(l.fecha_psicotecnico)}</td>
-          <td style="text-align:center; padding:4px 12px;">${isEditing ? `<input type='number' value='${l.cant_psicotecnico || ''}' data-field='cant_psicotecnico' class='input-tw input-inline' style='width:70px;'>` : (l.cant_psicotecnico || '')}</td>
-          <td style="padding:4px 12px;">${isEditing ? `<textarea data-field='obs_psicotecnico' class='input-tw input-inline' style='width:100%;height:2em;'>${l.obs_psicotecnico||''}</textarea>` : (l.obs_psicotecnico||'')}</td>
-        </tr>
-      </table>
-    `;
+    // Asignar datos a los campos de detalle
+    const detalle = trDetalle.querySelector('.detalle-block');
+    // Postulación
+    detalle.querySelector('.input-fecha-postulacion').value = toInputDate(l.fecha_postulacion);
+    detalle.querySelector('.input-cant-postulantes').value = l.cant_postulantes || '';
+    detalle.querySelector('.input-obs-postulacion').value = l.obs_postulacion || '';
+    // Selección
+    detalle.querySelector('.input-fecha-seleccion').value = toInputDate(l.fecha_seleccion);
+    detalle.querySelector('.input-cant-seleccionados').value = l.cant_seleccionados || '';
+    detalle.querySelector('.input-obs-seleccion').value = l.obs_seleccion || '';
+    // Entrevista
+    detalle.querySelector('.input-fecha-entrevista').value = toInputDate(l.fecha_entrevista);
+    detalle.querySelector('.input-cant-entrevistados').value = l.cant_entrevistados || '';
+    detalle.querySelector('.input-obs-entrevista').value = l.obs_entrevista || '';
+    // Psicotécnico
+    detalle.querySelector('.input-fecha-psicotecnico').value = toInputDate(l.fecha_psicotecnico);
+    detalle.querySelector('.input-cant-psicotecnico').value = l.cant_psicotecnico || '';
+    detalle.querySelector('.input-obs-psicotecnico').value = l.obs_psicotecnico || '';
+
+    // Habilitar edición en detalle si corresponde
+    const detalleInputs = detalle.querySelectorAll('input, textarea');
+    if (isEditing) {
+      detalleInputs.forEach(el => el.disabled = false);
+    } else {
+      detalleInputs.forEach(el => el.disabled = true);
+    }
+
     tbody.appendChild(trDetalle);
+
+    // Evento para expandir/colapsar detalle
+    tr.querySelector('.toggle-detalle').onclick = function() {
+      if (trDetalle.style.display === 'none') {
+        trDetalle.style.display = '';
+        this.textContent = '▼';
+      } else {
+        trDetalle.style.display = 'none';
+        this.textContent = '▶';
+      }
+    };
   });
 
   // Eventos para expandir/colapsar detalle

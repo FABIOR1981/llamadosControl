@@ -55,14 +55,64 @@
     </template>
     <template id="template-fila-llamado">
       <tr class="llamado-row">
-        <!-- contenido generado dinámicamente por JS -->
+        <td><button class="toggle-detalle" title="Ver detalle">▶</button></td>
+        <td class="td-id"></td>
+        <td class="td-empresa"></td>
+        <td class="td-nombre"></td>
+        <td><input type="date" class="input-tw input-inline input-fecha-inicio" style="width:130px;" disabled></td>
+        <td><input type="date" class="input-tw input-inline input-fecha-fin" style="width:130px;" disabled></td>
+        <td style="text-align:center;"><input type="number" class="input-tw input-inline input-finalistas" style="width:70px;" disabled></td>
+        <td><select class="input-tw input-inline input-estado" style="width:110px;" disabled>
+          <option value="Abierto">Abierto</option>
+          <option value="En Curso">En Curso</option>
+          <option value="Pausado">Pausado</option>
+          <option value="Cerrado">Cerrado</option>
+        </select></td>
+        <td class="td-dias"></td>
+        <td class="td-conversion"></td>
+        <td>
+          <button class="btn-editar text-blue-600 underline hover:text-blue-900">Editar</button>
+          <button class="btn-guardar" style="display:none;">Guardar</button>
+          <button class="btn-cancelar" style="display:none;">Cancelar</button>
+        </td>
       </tr>
     </template>
     <template id="template-detalle-llamado">
       <tr class="detalle-row" style="display:none;">
         <td colspan="10">
           <div class="detalle-block" style="padding:0.5em 1em; background:#f8fafc; border-radius:0.5em;">
-            <!-- tabla de detalle generada por JS -->
+            <table class="tabla-detalle" style="width:auto; margin-top:0.5em; font-size:1em; border-radius:0.75em; overflow:hidden; border-collapse:separate; border-spacing:0; box-shadow:0 2px 8px rgba(30,64,175,0.06);">
+              <tr style="font-weight:700; background:#dbeafe; color:#2563eb;">
+                <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Etapa</td>
+                <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Fecha</td>
+                <td style="padding:6px 18px; text-align:center; font-family:'Segoe UI',Arial,sans-serif;">Cantidad</td>
+                <td style="padding:6px 18px; font-family:'Segoe UI',Arial,sans-serif;">Observaciones</td>
+              </tr>
+              <tr class="detalle-postulacion" style="background:#fff;">
+                <td style="padding:4px 12px;">Postulación</td>
+                <td style="padding:4px 12px;"><input type="date" class="input-tw input-inline input-fecha-postulacion" style="width:130px;" disabled></td>
+                <td style="text-align:center; padding:4px 12px;"><input type="number" class="input-tw input-inline input-cant-postulantes" style="width:70px;" disabled></td>
+                <td style="padding:4px 12px;"><textarea class="input-tw input-inline input-obs-postulacion" style="width:100%;height:2em;" disabled></textarea></td>
+              </tr>
+              <tr class="detalle-seleccion" style="background:#f1f5f9;">
+                <td style="padding:4px 12px;">Selección</td>
+                <td style="padding:4px 12px;"><input type="date" class="input-tw input-inline input-fecha-seleccion" style="width:130px;" disabled></td>
+                <td style="text-align:center; padding:4px 12px;"><input type="number" class="input-tw input-inline input-cant-seleccionados" style="width:70px;" disabled></td>
+                <td style="padding:4px 12px;"><textarea class="input-tw input-inline input-obs-seleccion" style="width:100%;height:2em;" disabled></textarea></td>
+              </tr>
+              <tr class="detalle-entrevista" style="background:#fff;">
+                <td style="padding:4px 12px;">Entrevista</td>
+                <td style="padding:4px 12px;"><input type="date" class="input-tw input-inline input-fecha-entrevista" style="width:130px;" disabled></td>
+                <td style="text-align:center; padding:4px 12px;"><input type="number" class="input-tw input-inline input-cant-entrevistados" style="width:70px;" disabled></td>
+                <td style="padding:4px 12px;"><textarea class="input-tw input-inline input-obs-entrevista" style="width:100%;height:2em;" disabled></textarea></td>
+              </tr>
+              <tr class="detalle-psicotecnico" style="background:#f1f5f9;">
+                <td style="padding:4px 12px;">Psicotécnico</td>
+                <td style="padding:4px 12px;"><input type="date" class="input-tw input-inline input-fecha-psicotecnico" style="width:130px;" disabled></td>
+                <td style="text-align:center; padding:4px 12px;"><input type="number" class="input-tw input-inline input-cant-psicotecnico" style="width:70px;" disabled></td>
+                <td style="padding:4px 12px;"><textarea class="input-tw input-inline input-obs-psicotecnico" style="width:100%;height:2em;" disabled></textarea></td>
+              </tr>
+            </table>
           </div>
         </td>
       </tr>
