@@ -24,7 +24,7 @@ window.LLAMADOS_COLUMNAS_CABECERA = [
   { key: 'estado', label: 'Estado', visible: true },
   { key: 'dias_activos', label: 'Días Activos', visible: true },
   { key: 'conversion_final', label: '% Conversión Final', visible: true },
-  { key: 'acciones', label: 'Editar', visible: false }
+  { key: 'acciones', label: 'Editar', visible: true }
 ];
 
 // Columnas visibles en el detalle
