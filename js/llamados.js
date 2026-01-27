@@ -260,56 +260,58 @@ function renderTabla() {
       }
       tr.appendChild(td);
     });
-    // Habilitar edición si corresponde
+    // Habilitar edición solo si existen los botones (columna acciones visible)
     const btnEditar = tr.querySelector('.btn-editar');
     const btnGuardar = tr.querySelector('.btn-guardar');
     const btnCancelar = tr.querySelector('.btn-cancelar');
     const inputs = tr.querySelectorAll('input, select');
-    if (isEditing) {
-      inputs.forEach(el => el.disabled = false);
-      if (btnEditar) btnEditar.style.display = 'none';
-      if (btnGuardar) btnGuardar.style.display = '';
-      if (btnCancelar) btnCancelar.style.display = '';
-    } else {
-      inputs.forEach(el => el.disabled = true);
-      if (btnEditar) btnEditar.style.display = '';
-      if (btnGuardar) btnGuardar.style.display = 'none';
-      if (btnCancelar) btnCancelar.style.display = 'none';
-    }
-    if (btnEditar) btnEditar.onclick = () => {
-      editIdLlamado = l.id_llamado;
-      renderTabla();
-    };
-    if (btnGuardar) btnGuardar.onclick = async () => {
-      const idxOriginal = llamados.findIndex(x => x.id_llamado === l.id_llamado);
-      if (idxOriginal !== -1) {
-        // Guardar campos del cabezal
-        (window.LLAMADOS_COLUMNAS_CABECERA || []).forEach(col => {
-          if (col.key !== 'acciones' && col.key !== 'dias_activos' && col.key !== 'conversion_final') {
-            const input = tr.querySelector(`[data-field='${col.key}']`);
-            if (input) llamados[idxOriginal][col.key] = input.value;
-          }
-        });
-        // Guardar campos del detalle
-        const detalle = tr.nextElementSibling.querySelector('.detalle-block');
-        if (detalle) {
-          const detalleInputs = detalle.querySelectorAll('input, textarea');
-          detalleInputs.forEach(input => {
-            const field = input.getAttribute('data-field');
-            let val = input.value;
-            if (input.type === 'number') val = val ? Number(val) : '';
-            llamados[idxOriginal][field] = val;
-          });
-        }
+    if (btnEditar || btnGuardar || btnCancelar) {
+      if (isEditing) {
+        inputs.forEach(el => el.disabled = false);
+        if (btnEditar) btnEditar.style.display = 'none';
+        if (btnGuardar) btnGuardar.style.display = '';
+        if (btnCancelar) btnCancelar.style.display = '';
+      } else {
+        inputs.forEach(el => el.disabled = true);
+        if (btnEditar) btnEditar.style.display = '';
+        if (btnGuardar) btnGuardar.style.display = 'none';
+        if (btnCancelar) btnCancelar.style.display = 'none';
       }
-      await guardarLlamados();
-      editIdLlamado = null;
-      renderTabla();
-    };
-    if (btnCancelar) btnCancelar.onclick = () => {
-      editIdLlamado = null;
-      renderTabla();
-    };
+      if (btnEditar) btnEditar.onclick = () => {
+        editIdLlamado = l.id_llamado;
+        renderTabla();
+      };
+      if (btnGuardar) btnGuardar.onclick = async () => {
+        const idxOriginal = llamados.findIndex(x => x.id_llamado === l.id_llamado);
+        if (idxOriginal !== -1) {
+          // Guardar campos del cabezal
+          (window.LLAMADOS_COLUMNAS_CABECERA || []).forEach(col => {
+            if (col.key !== 'acciones' && col.key !== 'dias_activos' && col.key !== 'conversion_final') {
+              const input = tr.querySelector(`[data-field='${col.key}']`);
+              if (input) llamados[idxOriginal][col.key] = input.value;
+            }
+          });
+          // Guardar campos del detalle
+          const detalle = tr.nextElementSibling.querySelector('.detalle-block');
+          if (detalle) {
+            const detalleInputs = detalle.querySelectorAll('input, textarea');
+            detalleInputs.forEach(input => {
+              const field = input.getAttribute('data-field');
+              let val = input.value;
+              if (input.type === 'number') val = val ? Number(val) : '';
+              llamados[idxOriginal][field] = val;
+            });
+          }
+        }
+        await guardarLlamados();
+        editIdLlamado = null;
+        renderTabla();
+      };
+      if (btnCancelar) btnCancelar.onclick = () => {
+        editIdLlamado = null;
+        renderTabla();
+      };
+    }
     tbody.appendChild(tr);
 
     // Fila detalle usando template
