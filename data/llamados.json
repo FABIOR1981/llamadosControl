@@ -5,7 +5,7 @@
     "nombre_puesto": "Vendedor para salón",
     "fecha_inicio": "2026-01-15",
     "fecha_fin": "2026-01-24",
-    "cant_finalistas": 1,
+    "cant_finalistas": "1",
     "estado": "Pausado",
     "fecha_postulacion": "2026-01-19",
     "cant_postulantes": 150,
@@ -18,7 +18,8 @@
     "obs_postulacion": "",
     "obs_seleccion": "",
     "obs_entrevista": "Precencial",
-    "obs_psicotecnico": ""
+    "obs_psicotecnico": "",
+    "publicado": "BuscoJobs"
   },
   {
     "id_llamado": "L-01AA",
