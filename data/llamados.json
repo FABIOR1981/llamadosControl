@@ -29,16 +29,16 @@
     "cant_finalistas": "1",
     "estado": "En Curso",
     "fecha_postulacion": "2026-01-21",
-    "cant_postulantes": 3333,
-    "fecha_seleccion": "",
-    "cant_seleccionados": "",
-    "fecha_entrevista": "",
-    "cant_entrevistados": "",
-    "fecha_psicotecnico": "",
-    "cant_psicotecnico": "",
+    "cant_postulantes": 300,
+    "fecha_seleccion": "2026-01-23",
+    "cant_seleccionados": 15,
+    "fecha_entrevista": "2026-01-24",
+    "cant_entrevistados": 10,
+    "fecha_psicotecnico": "2026-01-26",
+    "cant_psicotecnico": 3,
     "obs_postulacion": "",
     "obs_seleccion": "",
-    "obs_entrevista": "",
-    "obs_psicotecnico": ""
+    "obs_entrevista": "Presencial",
+    "obs_psicotecnico": "Bender, MBTI ,Dibujo, Roshard,etc"
   }
 ]
