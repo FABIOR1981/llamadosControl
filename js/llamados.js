@@ -250,26 +250,9 @@ function renderTabla() {
       }
     };
   });
-  // Ya no se usan eventos por data-idx, todo se maneja por id_llamado
+  
 }
 document.addEventListener('DOMContentLoaded', () => {
   obtenerLlamados();
-  // Eliminado: ya no existe el formulario de alta
-  // document.getElementById(FORM_ID).addEventListener('submit', async function(e) {
-  //   e.preventDefault();
-  //   const data = Object.fromEntries(new FormData(this).entries());
-  //   ['cant_postulantes','cant_seleccionados','cant_entrevistados','cant_psicotecnico','cant_finalistas'].forEach(k => {
-  //     data[k] = data[k] ? Number(data[k]) : '';
-  //   });
-  //   if (editIdx !== null) {
-  //     llamados[editIdx] = data;
-  //     editIdx = null;
-  //     this.querySelector('button[type="submit"]').textContent = '➕ Agregar Llamado';
-  //   } else {
-  //     llamados.push(data);
-  //   }
-  //   await guardarLlamados();
-  //   renderTabla();
-  //   this.reset();
-  // });
+  
 });
