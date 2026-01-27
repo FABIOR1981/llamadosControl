@@ -373,16 +373,8 @@ function renderTabla() {
       tablaDetalle.appendChild(trEtapa);
     });
     tbody.appendChild(trDetalle);
-    // Evento para expandir/colapsar detalle (solo uno abierto a la vez)
+    // Evento para expandir/colapsar solo su propio detalle
     btnExpand.onclick = function() {
-      // Cerrar todos los detalles
-      tbody.querySelectorAll('.detalle-row').forEach(row => {
-        row.style.display = 'none';
-      });
-      tbody.querySelectorAll('.toggle-detalle').forEach(btn => {
-        btn.textContent = '▶';
-      });
-      // Si el actual estaba cerrado, abrirlo
       if (trDetalle.style.display === 'none' || !trDetalle.style.display) {
         trDetalle.style.display = '';
         btnExpand.textContent = '▼';
