@@ -97,7 +97,7 @@ function renderTabla() {
 
   // Fila para nuevo llamado primero usando template
   const nuevo = {
-    id_llamado: '', empresa: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
+    id_llamado: '', publicado: '', empresa: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
     fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
   };
   const tplNuevo = document.getElementById('template-fila-nueva');
@@ -128,6 +128,9 @@ function renderTabla() {
     let isEditing = (editIdLlamado === l.id_llamado);
     // Asignar datos a la fila principal
     tr.querySelector('.td-id').textContent = l.id_llamado || '';
+    // Campo editable publicado
+    const inputPublicado = tr.querySelector('.input-publicado');
+    if (inputPublicado) inputPublicado.value = l.publicado || '';
     tr.querySelector('.td-empresa').textContent = l.empresa || '';
     tr.querySelector('.td-nombre').textContent = l.nombre_puesto || '';
     tr.querySelector('.input-fecha-inicio').value = toInputDate(l.fecha_inicio);
@@ -167,6 +170,9 @@ function renderTabla() {
         llamados[idxOriginal].fecha_fin = tr.querySelector('.input-fecha-fin').value;
         llamados[idxOriginal].cant_finalistas = tr.querySelector('.input-finalistas').value;
         llamados[idxOriginal].estado = tr.querySelector('.input-estado').value;
+        // Guardar campo publicado
+        const inputPublicado = tr.querySelector('.input-publicado');
+        if (inputPublicado) llamados[idxOriginal].publicado = inputPublicado.value;
         // Guardar campos del detalle
         const detalle = tr.nextElementSibling.querySelector('.detalle-block');
         if (detalle) {
