@@ -375,14 +375,17 @@ function renderTabla() {
     tbody.appendChild(trDetalle);
     // Evento para expandir/colapsar solo su propio detalle
     btnExpand.onclick = function() {
-      if (trDetalle.style.display === 'none' || !trDetalle.style.display) {
-        trDetalle.style.display = '';
+      const expanded = trDetalle.style.display !== 'none' && trDetalle.style.display !== '';
+      if (trDetalle.style.display === 'none' || trDetalle.style.display === '') {
+        trDetalle.style.display = 'table-row';
         btnExpand.textContent = '▼';
       } else {
         trDetalle.style.display = 'none';
         btnExpand.textContent = '▶';
       }
     };
+    // Sincronizar ícono al crear (por si acaso)
+    btnExpand.textContent = (trDetalle.style.display === 'none' || trDetalle.style.display === '') ? '▶' : '▼';
   });
 }
 document.addEventListener('DOMContentLoaded', () => {
