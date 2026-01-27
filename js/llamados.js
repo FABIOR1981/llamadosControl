@@ -323,6 +323,7 @@ function renderTabla() {
     // Fila detalle usando template
     const tplDetalle = document.getElementById('template-detalle-llamado');
     const trDetalle = tplDetalle.content.cloneNode(true).children[0];
+    trDetalle.style.display = 'none'; // Siempre iniciar oculto
     const tablaDetalle = trDetalle.querySelector('.tabla-detalle');
     tablaDetalle.innerHTML = '';
     // Header detalle
