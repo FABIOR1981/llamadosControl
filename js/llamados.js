@@ -162,10 +162,22 @@ function renderTabla() {
       // Buscar el objeto original por id_llamado
       const idxOriginal = llamados.findIndex(x => x.id_llamado === l.id_llamado);
       if (idxOriginal !== -1) {
+        // Guardar campos del cabezal
         llamados[idxOriginal].fecha_inicio = tr.querySelector('.input-fecha-inicio').value;
         llamados[idxOriginal].fecha_fin = tr.querySelector('.input-fecha-fin').value;
         llamados[idxOriginal].cant_finalistas = tr.querySelector('.input-finalistas').value;
         llamados[idxOriginal].estado = tr.querySelector('.input-estado').value;
+        // Guardar campos del detalle
+        const detalle = tr.nextElementSibling.querySelector('.detalle-block');
+        if (detalle) {
+          const detalleInputs = detalle.querySelectorAll('input, textarea');
+          detalleInputs.forEach(input => {
+            const field = input.getAttribute('data-field');
+            let val = input.value;
+            if (input.type === 'number') val = val ? Number(val) : '';
+            llamados[idxOriginal][field] = val;
+          });
+        }
       }
       await guardarLlamados();
       editIdLlamado = null;
@@ -205,30 +217,6 @@ function renderTabla() {
     const detalleInputs = detalle.querySelectorAll('input, textarea');
     if (isEditing) {
       detalleInputs.forEach(el => el.disabled = false);
-      // Agregar botón guardar detalle
-      if (!trDetalle.querySelector('.btn-guardar-detalle')) {
-        const btnGuardarDetalle = document.createElement('button');
-        btnGuardarDetalle.textContent = 'Guardar Detalle';
-        btnGuardarDetalle.className = 'btn-guardar-detalle';
-        btnGuardarDetalle.style.margin = '10px 0 0 0';
-        detalle.appendChild(btnGuardarDetalle);
-        btnGuardarDetalle.onclick = async function() {
-          // Buscar el objeto original por id_llamado
-          const idxOriginal = llamados.findIndex(x => x.id_llamado === l.id_llamado);
-          if (idxOriginal !== -1) {
-            // Guardar todos los campos detalle
-            detalleInputs.forEach(input => {
-              const field = input.getAttribute('data-field');
-              let val = input.value;
-              if (input.type === 'number') val = val ? Number(val) : '';
-              llamados[idxOriginal][field] = val;
-            });
-          }
-          await guardarLlamados();
-          editIdLlamado = null;
-          renderTabla();
-        };
-      }
     } else {
       detalleInputs.forEach(el => el.disabled = true);
     }
