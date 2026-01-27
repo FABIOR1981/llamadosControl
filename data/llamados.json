@@ -1,6 +1,7 @@
 [
   {
     "id_llamado": "L-01A",
+    "empresa": "A.C.E.",
     "nombre_puesto": "Vendedor para salón",
     "fecha_inicio": "2026-01-15",
     "fecha_fin": "2026-01-24",
@@ -14,7 +15,6 @@
     "cant_entrevistados": 10,
     "fecha_psicotecnico": "",
     "cant_psicotecnico": "",
-    "empresa": "A.C.E.",
     "obs_postulacion": "",
     "obs_seleccion": "",
     "obs_entrevista": "Precencial",
