@@ -1,6 +1,16 @@
+
 // Lógica de gestión de llamados laborales
 const FORM_ID = 'llamadoForm';
 const TABLE_ID = 'tablaLlamados';
+// Importar estados desde config.js
+let ESTADOS_LLAMADO = ['Abierto','En Curso','Pausado','Cerrado'];
+try {
+  // Si se usa import/export, usar: import { ESTADOS_LLAMADO } from './config.js';
+  // Pero para compatibilidad, cargar dinámicamente si existe window.ESTADOS_LLAMADO
+  if (window.ESTADOS_LLAMADO) {
+    ESTADOS_LLAMADO = window.ESTADOS_LLAMADO;
+  }
+} catch(e) {}
 
 let llamados = [];
 
@@ -102,6 +112,17 @@ function renderTabla() {
   };
   const tplNuevo = document.getElementById('template-fila-nueva');
   const trNuevo = tplNuevo.content.cloneNode(true).children[0];
+  // Generar dinámicamente el combo de estado
+  const tdEstadoNuevo = trNuevo.querySelector("[data-field='estado']");
+  if (tdEstadoNuevo && tdEstadoNuevo.tagName === 'SELECT') {
+    tdEstadoNuevo.innerHTML = '';
+    ESTADOS_LLAMADO.forEach(e => {
+      const opt = document.createElement('option');
+      opt.value = e;
+      opt.textContent = e;
+      tdEstadoNuevo.appendChild(opt);
+    });
+  }
   tbody.appendChild(trNuevo);
   trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
     const inputs = trNuevo.querySelectorAll('.input-inline, select.input-inline');
@@ -136,7 +157,18 @@ function renderTabla() {
     tr.querySelector('.input-fecha-inicio').value = toInputDate(l.fecha_inicio);
     tr.querySelector('.input-fecha-fin').value = toInputDate(l.fecha_fin);
     tr.querySelector('.input-finalistas').value = l.cant_finalistas || '';
-    tr.querySelector('.input-estado').value = l.estado || 'Abierto';
+    // Generar dinámicamente el combo de estado en edición
+    const selectEstado = tr.querySelector('.input-estado');
+    if (selectEstado) {
+      selectEstado.innerHTML = '';
+      ESTADOS_LLAMADO.forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e;
+        opt.textContent = e;
+        selectEstado.appendChild(opt);
+      });
+      selectEstado.value = l.estado || 'Abierto';
+    }
     tr.querySelector('.td-dias').textContent = calcularDiasActivos(l.fecha_inicio, l.fecha_fin);
     tr.querySelector('.td-conversion').textContent = calcularConversionFinal(l.cant_postulantes, l.cant_finalistas);
 
