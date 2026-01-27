@@ -16,21 +16,8 @@
       <h2 class="text-2xl font-bold mb-6 text-blue-700">Llamados Ingresados</h2>
       <div class="overflow-x-auto rounded-xl border border-blue-100">
         <table id="tablaLlamados" class="min-w-full text-sm text-left bg-white rounded-xl">
-          <thead class="sticky top-0 z-10 bg-blue-100">
-            <tr class="">
-              <th class="px-3 py-2"></th>
-              <th class="px-3 py-2">ID</th>
-              <th class="px-3 py-2">Publicado</th>
-              <th class="px-3 py-2">Empresa</th>
-              <th class="px-3 py-2">Puesto</th>
-              <th class="px-3 py-2">Inicio</th>
-              <th class="px-3 py-2">Fin</th>
-              <th class="px-3 py-2">Finalistas</th>
-              <th class="px-3 py-2">Estado</th>
-              <th class="px-3 py-2">Días Activos</th>
-              <th class="px-3 py-2">% Conversión Final</th>
-              <th class="px-3 py-2">Editar</th>
-            </tr>
+          <thead class="sticky top-0 z-10 bg-blue-100" id="theadLlamados">
+            <!-- Render dinámico por JS -->
           </thead>
           <tbody>
             <!-- Filas generadas por JS -->
@@ -40,81 +27,21 @@
     </div>
     <!-- Templates para filas y detalles -->
     <template id="template-fila-nueva">
-      <tr class="llamado-row">
-        <td></td>
-        <td><input type='text' data-field='id_llamado' class='input-tw input-inline w-80'></td>
-        <td><input type='text' data-field='publicado' class='input-tw input-inline w-120'></td>
-        <td><input type='text' data-field='empresa' class='input-tw input-inline w-120'></td>
-        <td><input type='text' data-field='nombre_puesto' class='input-tw input-inline w-140'></td>
-        <td><input type='date' data-field='fecha_inicio' class='input-tw input-inline w-130'></td>
-        <td><input type='date' data-field='fecha_fin' class='input-tw input-inline w-130'></td>
-        <td class="text-center"><input type='number' data-field='cant_finalistas' class='input-tw input-inline w-70'></td>
-        <td><select data-field='estado' class='input-tw input-inline w-110'><option value='Abierto'>Abierto</option><option value='En Curso'>En Curso</option><option value='Pausado'>Pausado</option><option value='Cerrado'>Cerrado</option></select></td>
-        <td class="text-center"></td>
-        <td class="text-center"></td>
-        <td><button class='btn-guardar-nuevo'>Nuevo</button></td>
+      <tr class="llamado-row" id="fila-nueva-dinamica">
+        <!-- Render dinámico por JS -->
       </tr>
     </template>
     <template id="template-fila-llamado">
-      <tr class="llamado-row">
-        <td><button class="toggle-detalle" title="Ver detalle">▶</button></td>
-        <td class="td-id"></td>
-        <td class="td-publicado"></td>
-        <td class="td-empresa"></td>
-        <td class="td-nombre"></td>
-        <td><input type="date" class="input-tw input-inline input-fecha-inicio w-130" data-field="fecha_inicio" disabled></td>
-        <td><input type="date" class="input-tw input-inline input-fecha-fin w-130" data-field="fecha_fin" disabled></td>
-        <td class="text-center"><input type="number" class="input-tw input-inline input-finalistas w-70" data-field="cant_finalistas" disabled></td>
-        <td><select class="input-tw input-inline input-estado w-110" data-field="estado" disabled>
-          <option value="Abierto">Abierto</option>
-          <option value="En Curso">En Curso</option>
-          <option value="Pausado">Pausado</option>
-          <option value="Cerrado">Cerrado</option>
-        </select></td>
-        <td class="td-dias"></td>
-        <td class="td-conversion"></td>
-        <td>
-          <button class="btn-editar text-blue-600 underline hover:text-blue-900">Editar</button>
-          <button class="btn-guardar" style="display:none;">Guardar</button>
-          <button class="btn-cancelar" style="display:none;">Cancelar</button>
-        </td>
+      <tr class="llamado-row" id="fila-llamado-dinamica">
+        <!-- Render dinámico por JS -->
       </tr>
     </template>
     <template id="template-detalle-llamado">
       <tr class="detalle-row" style="display:none;">
-        <td colspan="10">
+        <td colspan="100">
           <div class="detalle-block">
-            <table class="tabla-detalle">
-              <tr class="tr-header">
-                <td class="td-etapa">Etapa</td>
-                <td class="td-fecha">Fecha</td>
-                <td class="td-cantidad text-center">Cantidad</td>
-                <td class="td-obs">Observaciones</td>
-              </tr>
-              <tr class="detalle-postulacion bg-white">
-                <td>Postulación</td>
-                <td><input type="date" class="input-tw input-inline input-fecha-postulacion w-130" data-field="fecha_postulacion" disabled></td>
-                <td class="text-center"><input type="number" class="input-tw input-inline input-cant-postulantes w-70" data-field="cant_postulantes" disabled></td>
-                <td><textarea class="input-tw input-inline input-obs-postulacion h-2em" data-field="obs_postulacion" disabled></textarea></td>
-              </tr>
-              <tr class="detalle-seleccion bg-f1f5f9">
-                <td>Selección</td>
-                <td><input type="date" class="input-tw input-inline input-fecha-seleccion w-130" data-field="fecha_seleccion" disabled></td>
-                <td class="text-center"><input type="number" class="input-tw input-inline input-cant-seleccionados w-70" data-field="cant_seleccionados" disabled></td>
-                <td><textarea class="input-tw input-inline input-obs-seleccion h-2em" data-field="obs_seleccion" disabled></textarea></td>
-              </tr>
-              <tr class="detalle-entrevista bg-white">
-                <td>Entrevista</td>
-                <td><input type="date" class="input-tw input-inline input-fecha-entrevista w-130" data-field="fecha_entrevista" disabled></td>
-                <td class="text-center"><input type="number" class="input-tw input-inline input-cant-entrevistados w-70" data-field="cant_entrevistados" disabled></td>
-                <td><textarea class="input-tw input-inline input-obs-entrevista h-2em" data-field="obs_entrevista" disabled></textarea></td>
-              </tr>
-              <tr class="detalle-psicotecnico bg-f1f5f9">
-                <td>Psicotécnico</td>
-                <td><input type="date" class="input-tw input-inline input-fecha-psicotecnico w-130" data-field="fecha_psicotecnico" disabled></td>
-                <td class="text-center"><input type="number" class="input-tw input-inline input-cant-psicotecnico w-70" data-field="cant_psicotecnico" disabled></td>
-                <td><textarea class="input-tw input-inline input-obs-psicotecnico h-2em" data-field="obs_psicotecnico" disabled></textarea></td>
-              </tr>
+            <table class="tabla-detalle" id="tablaDetalleDinamica">
+              <!-- Render dinámico por JS -->
             </table>
           </div>
         </td>

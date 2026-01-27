@@ -96,36 +96,82 @@ window.editarLlamado = function(id_llamado) {
 
 function renderTabla() {
   const tbody = document.querySelector(`#${TABLE_ID} tbody`);
-  if (!tbody) return;
+  const thead = document.getElementById('theadLlamados');
+  if (!tbody || !thead) return;
   tbody.innerHTML = '';
-  // Ordenar llamados por fecha_inicio descendente
-  const llamadosOrdenados = [...llamados].sort((a, b) => {
-    const fa = a.fecha_inicio ? new Date(a.fecha_inicio) : new Date(0);
-    const fb = b.fecha_inicio ? new Date(b.fecha_inicio) : new Date(0);
-    return fb - fa;
-  });
+  thead.innerHTML = '';
 
-  // Fila para nuevo llamado primero usando template
-  const nuevo = {
-    id_llamado: '', publicado: '', empresa: '', nombre_puesto: '', fecha_inicio: '', fecha_fin: '', cant_finalistas: '', estado: 'Abierto',
-    fecha_postulacion: '', cant_postulantes: '', fecha_seleccion: '', cant_seleccionados: '', fecha_entrevista: '', cant_entrevistados: '', fecha_psicotecnico: '', cant_psicotecnico: ''
-  };
+  // Renderizar encabezado dinámico
+  const trHead = document.createElement('tr');
+  // Botón de expandir/collapse
+  const thExpand = document.createElement('th');
+  thExpand.className = 'px-3 py-2';
+  trHead.appendChild(thExpand);
+  (window.LLAMADOS_COLUMNAS_CABECERA || []).filter(c => c.visible).forEach(col => {
+    const th = document.createElement('th');
+    th.className = 'px-3 py-2';
+    th.textContent = col.label;
+    trHead.appendChild(th);
+  });
+  thead.appendChild(trHead);
+
+  // Fila para nuevo llamado
+  const nuevo = {};
+  (window.LLAMADOS_COLUMNAS_CABECERA || []).forEach(col => { nuevo[col.key] = ''; });
+  // Detalle también
+  (window.LLAMADOS_COLUMNAS_DETALLE || []).forEach(etapa => {
+    nuevo[etapa.fecha] = '';
+    nuevo[etapa.cantidad] = '';
+    nuevo[etapa.obs] = '';
+  });
   const tplNuevo = document.getElementById('template-fila-nueva');
   const trNuevo = tplNuevo.content.cloneNode(true).children[0];
-  // Generar dinámicamente el combo de estado
-  const tdEstadoNuevo = trNuevo.querySelector("[data-field='estado']");
-  if (tdEstadoNuevo && tdEstadoNuevo.tagName === 'SELECT') {
-    tdEstadoNuevo.innerHTML = '';
-    ESTADOS_LLAMADO.forEach(e => {
-      const opt = document.createElement('option');
-      opt.value = e;
-      opt.textContent = e;
-      tdEstadoNuevo.appendChild(opt);
-    });
-  }
+  trNuevo.innerHTML = '';
+  // Botón vacío para expandir
+  const tdExpandNuevo = document.createElement('td');
+  trNuevo.appendChild(tdExpandNuevo);
+  (window.LLAMADOS_COLUMNAS_CABECERA || []).filter(c => c.visible).forEach(col => {
+    let td = document.createElement('td');
+    if (col.key === 'acciones') {
+      const btn = document.createElement('button');
+      btn.className = 'btn-guardar-nuevo';
+      btn.textContent = 'Nuevo';
+      td.appendChild(btn);
+    } else if (col.key === 'estado') {
+      const select = document.createElement('select');
+      select.setAttribute('data-field', col.key);
+      select.className = 'input-tw input-inline w-110';
+      (window.ESTADOS_LLAMADO || []).forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e;
+        opt.textContent = e;
+        select.appendChild(opt);
+      });
+      td.appendChild(select);
+    } else if (col.key === 'fecha_inicio' || col.key === 'fecha_fin') {
+      const input = document.createElement('input');
+      input.type = 'date';
+      input.setAttribute('data-field', col.key);
+      input.className = 'input-tw input-inline w-130';
+      td.appendChild(input);
+    } else if (col.key === 'cant_finalistas') {
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.setAttribute('data-field', col.key);
+      input.className = 'input-tw input-inline w-70';
+      td.appendChild(input);
+    } else {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.setAttribute('data-field', col.key);
+      input.className = 'input-tw input-inline w-120';
+      td.appendChild(input);
+    }
+    trNuevo.appendChild(td);
+  });
   tbody.appendChild(trNuevo);
   trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
-    const inputs = trNuevo.querySelectorAll('.input-inline, select.input-inline');
+    const inputs = trNuevo.querySelectorAll('input, select');
     const nuevoLlamado = { ...nuevo };
     inputs.forEach(input => {
       const field = input.getAttribute('data-field');
@@ -143,65 +189,107 @@ function renderTabla() {
   };
 
   // Renderizar llamados ordenados usando template
+  const llamadosOrdenados = [...llamados].sort((a, b) => {
+    const fa = a.fecha_inicio ? new Date(a.fecha_inicio) : new Date(0);
+    const fb = b.fecha_inicio ? new Date(b.fecha_inicio) : new Date(0);
+    return fb - fa;
+  });
   llamadosOrdenados.forEach((l) => {
     const tplFila = document.getElementById('template-fila-llamado');
     const tr = tplFila.content.cloneNode(true).children[0];
+    tr.innerHTML = '';
     let isEditing = (editIdLlamado === l.id_llamado);
-    // Asignar datos a la fila principal
-    tr.querySelector('.td-id').textContent = l.id_llamado || '';
-    // Mostrar publicado como texto
-    const tdPublicado = tr.querySelector('.td-publicado');
-    if (tdPublicado) tdPublicado.textContent = l.publicado || '';
-    tr.querySelector('.td-empresa').textContent = l.empresa || '';
-    tr.querySelector('.td-nombre').textContent = l.nombre_puesto || '';
-    tr.querySelector('.input-fecha-inicio').value = toInputDate(l.fecha_inicio);
-    tr.querySelector('.input-fecha-fin').value = toInputDate(l.fecha_fin);
-    tr.querySelector('.input-finalistas').value = l.cant_finalistas || '';
-    // Generar dinámicamente el combo de estado en edición
-    const selectEstado = tr.querySelector('.input-estado');
-    if (selectEstado) {
-      selectEstado.innerHTML = '';
-      ESTADOS_LLAMADO.forEach(e => {
-        const opt = document.createElement('option');
-        opt.value = e;
-        opt.textContent = e;
-        selectEstado.appendChild(opt);
-      });
-      selectEstado.value = l.estado || 'Abierto';
-    }
-    tr.querySelector('.td-dias').textContent = calcularDiasActivos(l.fecha_inicio, l.fecha_fin);
-    tr.querySelector('.td-conversion').textContent = calcularConversionFinal(l.cant_postulantes, l.cant_finalistas);
-
+    // Botón expandir/collapse
+    const tdExpand = document.createElement('td');
+    const btnExpand = document.createElement('button');
+    btnExpand.className = 'toggle-detalle';
+    btnExpand.title = 'Ver detalle';
+    btnExpand.textContent = '▶';
+    tdExpand.appendChild(btnExpand);
+    tr.appendChild(tdExpand);
+    // Renderizar columnas dinámicas
+    (window.LLAMADOS_COLUMNAS_CABECERA || []).filter(c => c.visible).forEach(col => {
+      let td = document.createElement('td');
+      if (col.key === 'acciones') {
+        const btnEditar = document.createElement('button');
+        btnEditar.className = 'btn-editar text-blue-600 underline hover:text-blue-900';
+        btnEditar.textContent = 'Editar';
+        const btnGuardar = document.createElement('button');
+        btnGuardar.className = 'btn-guardar';
+        btnGuardar.textContent = 'Guardar';
+        btnGuardar.style.display = 'none';
+        const btnCancelar = document.createElement('button');
+        btnCancelar.className = 'btn-cancelar';
+        btnCancelar.textContent = 'Cancelar';
+        btnCancelar.style.display = 'none';
+        td.appendChild(btnEditar);
+        td.appendChild(btnGuardar);
+        td.appendChild(btnCancelar);
+      } else if (col.key === 'estado') {
+        const select = document.createElement('select');
+        select.className = 'input-tw input-inline input-estado w-110';
+        select.setAttribute('data-field', col.key);
+        (window.ESTADOS_LLAMADO || []).forEach(e => {
+          const opt = document.createElement('option');
+          opt.value = e;
+          opt.textContent = e;
+          select.appendChild(opt);
+        });
+        select.value = l.estado || (window.ESTADO_LLAMADO_DEFAULT || 'Abierto');
+        td.appendChild(select);
+      } else if (col.key === 'fecha_inicio' || col.key === 'fecha_fin') {
+        const input = document.createElement('input');
+        input.type = 'date';
+        input.className = `input-tw input-inline input-${col.key} w-130`;
+        input.setAttribute('data-field', col.key);
+        input.value = toInputDate(l[col.key]);
+        td.appendChild(input);
+      } else if (col.key === 'cant_finalistas') {
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.className = 'input-tw input-inline input-finalistas w-70';
+        input.setAttribute('data-field', col.key);
+        input.value = l[col.key] || '';
+        td.appendChild(input);
+      } else if (col.key === 'dias_activos') {
+        td.textContent = calcularDiasActivos(l.fecha_inicio, l.fecha_fin);
+      } else if (col.key === 'conversion_final') {
+        td.textContent = calcularConversionFinal(l.cant_postulantes, l.cant_finalistas);
+      } else {
+        td.textContent = l[col.key] || '';
+      }
+      tr.appendChild(td);
+    });
     // Habilitar edición si corresponde
-    const editarBtn = tr.querySelector('.btn-editar');
-    const guardarBtn = tr.querySelector('.btn-guardar');
-    const cancelarBtn = tr.querySelector('.btn-cancelar');
+    const btnEditar = tr.querySelector('.btn-editar');
+    const btnGuardar = tr.querySelector('.btn-guardar');
+    const btnCancelar = tr.querySelector('.btn-cancelar');
     const inputs = tr.querySelectorAll('input, select');
     if (isEditing) {
       inputs.forEach(el => el.disabled = false);
-      editarBtn.style.display = 'none';
-      guardarBtn.style.display = '';
-      cancelarBtn.style.display = '';
+      if (btnEditar) btnEditar.style.display = 'none';
+      if (btnGuardar) btnGuardar.style.display = '';
+      if (btnCancelar) btnCancelar.style.display = '';
     } else {
       inputs.forEach(el => el.disabled = true);
-      editarBtn.style.display = '';
-      guardarBtn.style.display = 'none';
-      cancelarBtn.style.display = 'none';
+      if (btnEditar) btnEditar.style.display = '';
+      if (btnGuardar) btnGuardar.style.display = 'none';
+      if (btnCancelar) btnCancelar.style.display = 'none';
     }
-
-    editarBtn.onclick = () => {
+    if (btnEditar) btnEditar.onclick = () => {
       editIdLlamado = l.id_llamado;
       renderTabla();
     };
-    guardarBtn.onclick = async () => {
-      // Buscar el objeto original por id_llamado
+    if (btnGuardar) btnGuardar.onclick = async () => {
       const idxOriginal = llamados.findIndex(x => x.id_llamado === l.id_llamado);
       if (idxOriginal !== -1) {
         // Guardar campos del cabezal
-        llamados[idxOriginal].fecha_inicio = tr.querySelector('.input-fecha-inicio').value;
-        llamados[idxOriginal].fecha_fin = tr.querySelector('.input-fecha-fin').value;
-        llamados[idxOriginal].cant_finalistas = tr.querySelector('.input-finalistas').value;
-        llamados[idxOriginal].estado = tr.querySelector('.input-estado').value;
+        (window.LLAMADOS_COLUMNAS_CABECERA || []).forEach(col => {
+          if (col.key !== 'acciones' && col.key !== 'dias_activos' && col.key !== 'conversion_final') {
+            const input = tr.querySelector(`[data-field='${col.key}']`);
+            if (input) llamados[idxOriginal][col.key] = input.value;
+          }
+        });
         // Guardar campos del detalle
         const detalle = tr.nextElementSibling.querySelector('.detalle-block');
         if (detalle) {
@@ -218,74 +306,75 @@ function renderTabla() {
       editIdLlamado = null;
       renderTabla();
     };
-    cancelarBtn.onclick = () => {
+    if (btnCancelar) btnCancelar.onclick = () => {
       editIdLlamado = null;
       renderTabla();
     };
-
     tbody.appendChild(tr);
-
 
     // Fila detalle usando template
     const tplDetalle = document.getElementById('template-detalle-llamado');
     const trDetalle = tplDetalle.content.cloneNode(true).children[0];
-    // Asignar datos a los campos de detalle
-    const detalle = trDetalle.querySelector('.detalle-block');
-    // Postulación
-    detalle.querySelector('.input-fecha-postulacion').value = toInputDate(l.fecha_postulacion);
-    detalle.querySelector('.input-cant-postulantes').value = l.cant_postulantes || '';
-    detalle.querySelector('.input-obs-postulacion').value = l.obs_postulacion || '';
-    // Selección
-    detalle.querySelector('.input-fecha-seleccion').value = toInputDate(l.fecha_seleccion);
-    detalle.querySelector('.input-cant-seleccionados').value = l.cant_seleccionados || '';
-    detalle.querySelector('.input-obs-seleccion').value = l.obs_seleccion || '';
-    // Entrevista
-    detalle.querySelector('.input-fecha-entrevista').value = toInputDate(l.fecha_entrevista);
-    detalle.querySelector('.input-cant-entrevistados').value = l.cant_entrevistados || '';
-    detalle.querySelector('.input-obs-entrevista').value = l.obs_entrevista || '';
-    // Psicotécnico
-    detalle.querySelector('.input-fecha-psicotecnico').value = toInputDate(l.fecha_psicotecnico);
-    detalle.querySelector('.input-cant-psicotecnico').value = l.cant_psicotecnico || '';
-    detalle.querySelector('.input-obs-psicotecnico').value = l.obs_psicotecnico || '';
-
-    // Habilitar edición en detalle si corresponde
-    const detalleInputs = detalle.querySelectorAll('input, textarea');
-    if (isEditing) {
-      detalleInputs.forEach(el => el.disabled = false);
-    } else {
-      detalleInputs.forEach(el => el.disabled = true);
-    }
-
+    const tablaDetalle = trDetalle.querySelector('.tabla-detalle');
+    tablaDetalle.innerHTML = '';
+    // Header detalle
+    const trHeader = document.createElement('tr');
+    ['Etapa', 'Fecha', 'Cantidad', 'Observaciones'].forEach(label => {
+      const td = document.createElement('td');
+      td.textContent = label;
+      trHeader.appendChild(td);
+    });
+    tablaDetalle.appendChild(trHeader);
+    // Renderizar etapas visibles
+    (window.LLAMADOS_COLUMNAS_DETALLE || []).filter(e => e.visible).forEach(etapa => {
+      const trEtapa = document.createElement('tr');
+      trEtapa.className = `detalle-${etapa.etapa.toLowerCase()}`;
+      // Etapa
+      const tdEtapa = document.createElement('td');
+      tdEtapa.textContent = etapa.etapa;
+      trEtapa.appendChild(tdEtapa);
+      // Fecha
+      const tdFecha = document.createElement('td');
+      const inputFecha = document.createElement('input');
+      inputFecha.type = 'date';
+      inputFecha.className = `input-tw input-inline w-130`;
+      inputFecha.setAttribute('data-field', etapa.fecha);
+      inputFecha.value = toInputDate(l[etapa.fecha]);
+      trEtapa.appendChild(tdFecha);
+      tdFecha.appendChild(inputFecha);
+      // Cantidad
+      const tdCant = document.createElement('td');
+      const inputCant = document.createElement('input');
+      inputCant.type = 'number';
+      inputCant.className = 'input-tw input-inline w-70';
+      inputCant.setAttribute('data-field', etapa.cantidad);
+      inputCant.value = l[etapa.cantidad] || '';
+      tdCant.appendChild(inputCant);
+      trEtapa.appendChild(tdCant);
+      // Observaciones
+      const tdObs = document.createElement('td');
+      const inputObs = document.createElement('textarea');
+      inputObs.className = 'input-tw input-inline h-2em';
+      inputObs.setAttribute('data-field', etapa.obs);
+      inputObs.value = l[etapa.obs] || '';
+      tdObs.appendChild(inputObs);
+      trEtapa.appendChild(tdObs);
+      // Habilitar edición si corresponde
+      [inputFecha, inputCant, inputObs].forEach(el => { el.disabled = !isEditing; });
+      tablaDetalle.appendChild(trEtapa);
+    });
     tbody.appendChild(trDetalle);
-
     // Evento para expandir/colapsar detalle
-    tr.querySelector('.toggle-detalle').onclick = function() {
-      if (trDetalle.style.display === 'none') {
+    btnExpand.onclick = function() {
+      if (trDetalle.style.display === 'none' || !trDetalle.style.display) {
         trDetalle.style.display = '';
-        this.textContent = '▼';
+        btnExpand.textContent = '▼';
       } else {
         trDetalle.style.display = 'none';
-        this.textContent = '▶';
+        btnExpand.textContent = '▶';
       }
     };
   });
-
-  // Eventos para expandir/colapsar detalle
-  tbody.querySelectorAll('.toggle-detalle').forEach(btn => {
-    btn.onclick = function() {
-      const idx = this.getAttribute('data-idx');
-      const row = this.closest('tr');
-      const detalle = row.nextElementSibling;
-      if (detalle.style.display === 'none') {
-        detalle.style.display = '';
-        this.textContent = '▼';
-      } else {
-        detalle.style.display = 'none';
-        this.textContent = '▶';
-      }
-    };
-  });
-  
 }
 document.addEventListener('DOMContentLoaded', () => {
   obtenerLlamados();
