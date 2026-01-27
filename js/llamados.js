@@ -76,10 +76,11 @@ function toInputDate(fecha) {
   return '';
 }
 
-let editIdx = null;
 
-window.editarLlamado = function(idx) {
-  editIdx = idx;
+let editIdLlamado = null;
+
+window.editarLlamado = function(id_llamado) {
+  editIdLlamado = id_llamado;
   renderTabla();
 };
 
@@ -121,10 +122,10 @@ function renderTabla() {
   };
 
   // Renderizar llamados ordenados usando template
-  llamadosOrdenados.forEach((l, idx) => {
+  llamadosOrdenados.forEach((l) => {
     const tplFila = document.getElementById('template-fila-llamado');
     const tr = tplFila.content.cloneNode(true).children[0];
-    let isEditing = (editIdx === idx);
+    let isEditing = (editIdLlamado === l.id_llamado);
     // Asignar datos a la fila principal
     tr.querySelector('.td-id').textContent = l.id_llamado || '';
     tr.querySelector('.td-empresa').textContent = l.empresa || '';
@@ -154,24 +155,29 @@ function renderTabla() {
     }
 
     editarBtn.onclick = () => {
-      editIdx = idx;
+      editIdLlamado = l.id_llamado;
       renderTabla();
     };
     guardarBtn.onclick = async () => {
-      l.fecha_inicio = tr.querySelector('.input-fecha-inicio').value;
-      l.fecha_fin = tr.querySelector('.input-fecha-fin').value;
-      l.cant_finalistas = tr.querySelector('.input-finalistas').value;
-      l.estado = tr.querySelector('.input-estado').value;
+      // Buscar el objeto original por id_llamado
+      const idxOriginal = llamados.findIndex(x => x.id_llamado === l.id_llamado);
+      if (idxOriginal !== -1) {
+        llamados[idxOriginal].fecha_inicio = tr.querySelector('.input-fecha-inicio').value;
+        llamados[idxOriginal].fecha_fin = tr.querySelector('.input-fecha-fin').value;
+        llamados[idxOriginal].cant_finalistas = tr.querySelector('.input-finalistas').value;
+        llamados[idxOriginal].estado = tr.querySelector('.input-estado').value;
+      }
       await guardarLlamados();
-      editIdx = null;
+      editIdLlamado = null;
       renderTabla();
     };
     cancelarBtn.onclick = () => {
-      editIdx = null;
+      editIdLlamado = null;
       renderTabla();
     };
 
     tbody.appendChild(tr);
+
 
     // Fila detalle usando template
     const tplDetalle = document.getElementById('template-detalle-llamado');
@@ -232,37 +238,7 @@ function renderTabla() {
       }
     };
   });
-  tbody.querySelectorAll('.btn-guardar').forEach(btn => {
-    btn.onclick = async function() {
-      const idx = Number(this.getAttribute('data-idx'));
-      const tr = this.closest('tr');
-      const trDetalle = tr.nextElementSibling;
-      const inputs = tr.querySelectorAll('.input-inline, select.input-inline');
-      const inputsDetalle = trDetalle ? trDetalle.querySelectorAll('.input-inline, select.input-inline') : [];
-      const l = llamados[idx];
-      inputs.forEach(input => {
-        const field = input.getAttribute('data-field');
-        let val = input.value;
-        if (input.type === 'number') val = val ? Number(val) : '';
-        l[field] = val;
-      });
-      inputsDetalle.forEach(input => {
-        const field = input.getAttribute('data-field');
-        let val = input.value;
-        if (input.type === 'number') val = val ? Number(val) : '';
-        l[field] = val;
-      });
-      await guardarLlamados();
-      editIdx = null;
-      renderTabla();
-    };
-  });
-  tbody.querySelectorAll('.btn-cancelar').forEach(btn => {
-    btn.onclick = function() {
-      editIdx = null;
-      renderTabla();
-    };
-  });
+  // Ya no se usan eventos por data-idx, todo se maneja por id_llamado
 }
 document.addEventListener('DOMContentLoaded', () => {
   obtenerLlamados();
