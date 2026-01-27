@@ -170,23 +170,26 @@ function renderTabla() {
     trNuevo.appendChild(td);
   });
   tbody.appendChild(trNuevo);
-  trNuevo.querySelector('.btn-guardar-nuevo').onclick = async function() {
-    const inputs = trNuevo.querySelectorAll('input, select');
-    const nuevoLlamado = { ...nuevo };
-    inputs.forEach(input => {
-      const field = input.getAttribute('data-field');
-      let val = input.value;
-      if (input.type === 'number') val = val ? Number(val) : '';
-      nuevoLlamado[field] = val;
-    });
-    if (!nuevoLlamado.id_llamado || !nuevoLlamado.nombre_puesto) {
-      alert('Debe completar al menos ID y Nombre Puesto');
-      return;
-    }
-    llamados.push(nuevoLlamado);
-    await guardarLlamados();
-    renderTabla();
-  };
+  const btnGuardarNuevo = trNuevo.querySelector('.btn-guardar-nuevo');
+  if (btnGuardarNuevo) {
+    btnGuardarNuevo.onclick = async function() {
+      const inputs = trNuevo.querySelectorAll('input, select');
+      const nuevoLlamado = { ...nuevo };
+      inputs.forEach(input => {
+        const field = input.getAttribute('data-field');
+        let val = input.value;
+        if (input.type === 'number') val = val ? Number(val) : '';
+        nuevoLlamado[field] = val;
+      });
+      if (!nuevoLlamado.id_llamado || !nuevoLlamado.nombre_puesto) {
+        alert('Debe completar al menos ID y Nombre Puesto');
+        return;
+      }
+      llamados.push(nuevoLlamado);
+      await guardarLlamados();
+      renderTabla();
+    };
+  }
 
   // Renderizar llamados ordenados usando template
   const llamadosOrdenados = [...llamados].sort((a, b) => {
