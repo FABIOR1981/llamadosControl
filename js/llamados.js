@@ -128,9 +128,9 @@ function renderTabla() {
     let isEditing = (editIdLlamado === l.id_llamado);
     // Asignar datos a la fila principal
     tr.querySelector('.td-id').textContent = l.id_llamado || '';
-    // Campo editable publicado
-    const inputPublicado = tr.querySelector('.input-publicado');
-    if (inputPublicado) inputPublicado.value = l.publicado || '';
+    // Mostrar publicado como texto
+    const tdPublicado = tr.querySelector('.td-publicado');
+    if (tdPublicado) tdPublicado.textContent = l.publicado || '';
     tr.querySelector('.td-empresa').textContent = l.empresa || '';
     tr.querySelector('.td-nombre').textContent = l.nombre_puesto || '';
     tr.querySelector('.input-fecha-inicio').value = toInputDate(l.fecha_inicio);
@@ -170,9 +170,6 @@ function renderTabla() {
         llamados[idxOriginal].fecha_fin = tr.querySelector('.input-fecha-fin').value;
         llamados[idxOriginal].cant_finalistas = tr.querySelector('.input-finalistas').value;
         llamados[idxOriginal].estado = tr.querySelector('.input-estado').value;
-        // Guardar campo publicado
-        const inputPublicado = tr.querySelector('.input-publicado');
-        if (inputPublicado) llamados[idxOriginal].publicado = inputPublicado.value;
         // Guardar campos del detalle
         const detalle = tr.nextElementSibling.querySelector('.detalle-block');
         if (detalle) {
