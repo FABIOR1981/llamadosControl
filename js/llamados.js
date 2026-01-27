@@ -194,11 +194,14 @@ function renderTabla() {
     const fb = b.fecha_inicio ? new Date(b.fecha_inicio) : new Date(0);
     return fb - fa;
   });
+  // Detectar si la columna acciones está visible
+  const accionesVisible = (window.LLAMADOS_COLUMNAS_CABECERA || []).some(c => c.key === 'acciones' && c.visible);
   llamadosOrdenados.forEach((l) => {
     const tplFila = document.getElementById('template-fila-llamado');
     const tr = tplFila.content.cloneNode(true).children[0];
     tr.innerHTML = '';
-    let isEditing = (editIdLlamado === l.id_llamado);
+    // Solo permitir edición si la columna acciones está visible
+    let isEditing = accionesVisible && (editIdLlamado === l.id_llamado);
     // Botón expandir/collapse
     const tdExpand = document.createElement('td');
     const btnExpand = document.createElement('button');
@@ -265,7 +268,7 @@ function renderTabla() {
     const btnGuardar = tr.querySelector('.btn-guardar');
     const btnCancelar = tr.querySelector('.btn-cancelar');
     const inputs = tr.querySelectorAll('input, select');
-    if (btnEditar || btnGuardar || btnCancelar) {
+    if (accionesVisible && (btnEditar || btnGuardar || btnCancelar)) {
       if (isEditing) {
         inputs.forEach(el => el.disabled = false);
         if (btnEditar) btnEditar.style.display = 'none';
