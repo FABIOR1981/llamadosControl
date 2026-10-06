@@ -4,6 +4,10 @@ Aplicación web para hacer el seguimiento de llamados laborales (procesos de sel
 
 Sitio publicado: https://llamadoscontrol.netlify.app
 
+## Documentación
+
+El manual de usuario está en [documentacion-central](https://github.com/FABIOR1981/documentacion-central/tree/main/llamadosControl/documentacion) ([PDF](https://github.com/FABIOR1981/documentacion-central/blob/main/llamadosControl/documentacion/MANUAL_USUARIO.pdf)). También se puede consultar desde la bitácora de proyectos.
+
 ## Funcionalidades
 
 - **Tabla de llamados** con ID, publicado, empresa, puesto, fechas de inicio y fin, finalistas, estado, días activos y % de conversión final.
